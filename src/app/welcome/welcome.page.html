@@ -1,0 +1,43 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>SkeletonAPP</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="welcome-content">
+  <div class="welcome-container">
+    <div class="welcome-header">
+      <ion-icon name="flash"></ion-icon>
+    </div>
+    
+    <h1>¡Bienvenido!</h1>
+    <p class="subtitle">A SkeletonAPP</p>
+    
+    <p class="description">
+      Esta es una aplicación móvil construida con Ionic y Angular. Estamos listos para crear algo increíble.
+    </p>
+
+    <div class="button-group">
+      <ion-button 
+        expand="block" 
+        color="primary"
+        routerLink="/login"
+        routerLinkActive="active">
+        <ion-icon name="log-in" slot="start"></ion-icon>
+        Iniciar Sesión
+      </ion-button>
+      
+      <ion-button 
+        expand="block" 
+        color="secondary"
+        routerLink="/home">
+        <ion-icon name="home" slot="start"></ion-icon>
+        Ir al Inicio
+      </ion-button>
+    </div>
+
+    <p class="footer">
+      <small>v1.0.0</small>
+    </p>
+  </div>
+</ion-content>
