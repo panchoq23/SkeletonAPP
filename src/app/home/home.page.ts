@@ -8,6 +8,16 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { UserService } from '../services/user.service';
 
+const HTML_ENTITIES: Record<string, string> = {
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  "'": '&#039;'
+};
+
+const escapeHtml = (value: string): string => value.replace(/[&<>"']/g, (character) => HTML_ENTITIES[character]);
+
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -111,8 +121,10 @@ export class HomePage implements OnInit {
 
     // Formatear fecha
     let fechaFormato = '';
+    let fechaGuardada = '';
     if (this.fechaNacimiento) {
       const fecha = new Date(this.fechaNacimiento);
+      fechaGuardada = fecha.toISOString();
       fechaFormato = fecha.toLocaleDateString('es-ES');
     }
 
@@ -122,17 +134,17 @@ export class HomePage implements OnInit {
       nombre: this.nombre,
       apellido: this.apellido,
       nivelEducacion: this.nivelEducacion,
-      fechaNacimiento: fechaFormato
+      fechaNacimiento: fechaGuardada || undefined
     });
 
     // Mostrar alerta con la información
     let mensaje = `<strong>Información del Usuario:</strong><br>`;
-    mensaje += `<strong>Usuario:</strong> ${this.usuario}<br>`;
-    mensaje += `<strong>Nombre:</strong> ${this.nombre}<br>`;
-    mensaje += `<strong>Apellido:</strong> ${this.apellido}`;
+    mensaje += `<strong>Usuario:</strong> ${escapeHtml(this.usuario)}<br>`;
+    mensaje += `<strong>Nombre:</strong> ${escapeHtml(this.nombre)}<br>`;
+    mensaje += `<strong>Apellido:</strong> ${escapeHtml(this.apellido)}`;
     
     if (this.nivelEducacion) {
-      mensaje += `<br><strong>Nivel de Educación:</strong> ${this.nivelEducacion}`;
+      mensaje += `<br><strong>Nivel de Educación:</strong> ${escapeHtml(this.nivelEducacion)}`;
     }
     if (fechaFormato) {
       mensaje += `<br><strong>Fecha de Nacimiento:</strong> ${fechaFormato}`;

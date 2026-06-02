@@ -7,8 +7,10 @@
 }
 
 ion-card {
+  box-sizing: border-box;
   width: 100%;
   max-width: 500px;
+  margin-inline: 0;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
@@ -25,6 +27,7 @@ ion-label {
 }
 
 ion-input {
+  box-sizing: border-box;
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 4px;

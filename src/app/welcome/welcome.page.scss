@@ -1,12 +1,16 @@
 .welcome-content {
+  --background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.welcome-content::part(scroll) {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
 .welcome-container {
+  box-sizing: border-box;
+  width: 100%;
   text-align: center;
   padding: 20px;
   color: white;
