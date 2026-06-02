@@ -21,6 +21,7 @@
         <div class="form-group">
           <ion-label>Nombre</ion-label>
           <ion-input 
+            #nombreInput
             [(ngModel)]="nombre" 
             placeholder="Ingrese su nombre"
             type="text">
@@ -31,6 +32,7 @@
         <div class="form-group">
           <ion-label>Apellido</ion-label>
           <ion-input 
+            #apellidoInput
             [(ngModel)]="apellido" 
             placeholder="Ingrese su apellido"
             type="text">
@@ -49,13 +51,18 @@
           </ion-select>
         </div>
 
-        <!-- Campo Fecha de Nacimiento -->
+        <!-- Campo Fecha de Nacimiento con Material DatePicker -->
         <div class="form-group">
-          <ion-label>Fecha de Nacimiento</ion-label>
-          <ion-input 
-            [(ngModel)]="fechaNacimiento" 
-            type="date">
-          </ion-input>
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Fecha de Nacimiento</mat-label>
+            <input 
+              matInput 
+              [matDatepicker]="picker" 
+              [(ngModel)]="fechaNacimiento"
+              placeholder="Seleccione fecha">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
         </div>
 
         <!-- Botones -->
