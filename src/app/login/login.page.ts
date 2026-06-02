@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonInput, IonButton, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonLabel, NavController } from '@ionic/angular/standalone';
@@ -25,20 +25,15 @@ import { UserService } from '../services/user.service';
     FormsModule
   ]
 })
-export class LoginPage implements OnInit {
+export class LoginPage {
+  private readonly userService = inject(UserService);
+  private readonly navCtrl = inject(NavController);
+
   usuario: string = '';
   contrasena: string = '';
   
   usuarioError: string = '';
   contrasenaError: string = '';
-
-  constructor(
-    private userService: UserService,
-    private navCtrl: NavController
-  ) { }
-
-  ngOnInit() {
-  }
 
   validarUsuario(): boolean {
     this.usuarioError = '';

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonHeader, IonToolbar, IonTitle, IonContent, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonInput, IonButton, IonLabel, IonSelect, IonSelectOption, AlertController } from '@ionic/angular/standalone';
@@ -6,7 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import { UserService, UserData } from '../services/user.service';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-home',
@@ -36,6 +36,9 @@ import { UserService, UserData } from '../services/user.service';
   ],
 })
 export class HomePage implements OnInit {
+  private readonly userService = inject(UserService);
+  private readonly alertController = inject(AlertController);
+
   @ViewChild('nombreInput') nombreInput!: ElementRef;
   @ViewChild('apellidoInput') apellidoInput!: ElementRef;
 
@@ -44,11 +47,6 @@ export class HomePage implements OnInit {
   apellido: string = '';
   nivelEducacion: string = '';
   fechaNacimiento: Date | null = null;
-
-  constructor(
-    private userService: UserService,
-    private alertController: AlertController
-  ) {}
 
   ngOnInit() {
     const userData = this.userService.getUserData();
@@ -149,4 +147,3 @@ export class HomePage implements OnInit {
     await alert.present();
   }
 }
-
