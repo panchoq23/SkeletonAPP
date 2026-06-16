@@ -1,0 +1,43 @@
+<ion-card>
+  <ion-card-header>
+    <ion-card-title>Experiencia Laboral</ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+    <div class="form-group">
+      <ion-label>Empresa</ion-label>
+      <ion-input [(ngModel)]="empresa" placeholder="Nombre de la empresa"></ion-input>
+    </div>
+
+    <div class="form-group">
+      <ion-label>Año Inicio</ion-label>
+      <ion-input type="number" [(ngModel)]="anioInicio" placeholder="Ej: 2020"></ion-input>
+    </div>
+
+    <div class="form-group" style="display: flex; align-items: center; gap: 10px; margin: 10px 0;">
+      <ion-label>¿Trabaja actualmente aquí?</ion-label>
+      <ion-checkbox [(ngModel)]="trabajaActualmente"></ion-checkbox>
+    </div>
+
+    <div class="form-group" *ngIf="!trabajaActualmente">
+      <ion-label>Año Término</ion-label>
+      <ion-input type="number" [(ngModel)]="anioTermino" placeholder="Ej: 2023"></ion-input>
+    </div>
+
+    <div class="form-group">
+      <ion-label>Cargo</ion-label>
+      <ion-input [(ngModel)]="cargo" placeholder="Cargo ocupado"></ion-input>
+    </div>
+
+    <ion-button expand="block" color="success" (click)="guardar()">Agregar Experiencia</ion-button>
+
+    <ion-list *ngIf="experiencias.length > 0">
+      <ion-list-header>Experiencias Registradas</ion-list-header>
+      <ion-item *ngFor="let exp of experiencias">
+        <ion-label>
+          <h2>{{ exp.empresa }}</h2>
+          <p>{{ exp.cargo }} ({{ exp.anioInicio }} - {{ exp.trabajaActualmente ? 'Presente' : exp.anioTermino }})</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </ion-card-content>
+</ion-card>

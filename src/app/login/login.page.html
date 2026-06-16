@@ -20,8 +20,8 @@
         <!-- Campo Usuario -->
         <div class="form-group">
           <ion-label>Usuario</ion-label>
-          <ion-input 
-            [(ngModel)]="usuario" 
+          <ion-input
+            [(ngModel)]="usuario"
             placeholder="3-8 caracteres alfanuméricos"
             type="text"
             maxlength="8">
@@ -34,8 +34,8 @@
         <!-- Campo Contraseña -->
         <div class="form-group">
           <ion-label>Contraseña</ion-label>
-          <ion-input 
-            [(ngModel)]="contrasena" 
+          <ion-input
+            [(ngModel)]="contrasena"
             placeholder="4 dígitos"
             type="password"
             maxlength="4">
@@ -45,9 +45,12 @@
           </div>
         </div>
 
-        <!-- Botón Ingresar -->
+        <!-- Botones -->
         <ion-button expand="block" color="primary" (click)="ingresar()">
           Ingresar
+        </ion-button>
+        <ion-button expand="block" color="secondary" (click)="registrar()">
+          Registrarse
         </ion-button>
       </ion-card-content>
     </ion-card>
