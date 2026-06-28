@@ -1,26 +1,45 @@
 ﻿.map-container {
   width: 100%;
-  height: 70%;
+  height: 60%;
+  border-bottom: 2px solid var(--ion-color-light);
 }
 
 capacitor-google-map {
-  display: block;
+  display: inline-block;
   width: 100%;
   height: 100%;
 }
 
-.coords-panel {
-  padding: 16px;
-  background: var(--ion-background-color);
+.info-panel {
+  background: #fff;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  margin-top: -20px;
+  position: relative;
+  z-index: 10;
+  box-shadow: 0 -5px 15px rgba(0,0,0,0.05);
 
-  h3 {
-    margin: 0 0 8px;
-    font-size: 16px;
-    font-weight: 600;
+  .panel-title {
+    font-size: 20px;
+    font-weight: 800;
+    margin: 0 0 4px;
+    color: var(--ion-color-dark);
   }
 
-  p {
-    margin: 4px 0;
+  .panel-subtitle {
     font-size: 14px;
+    color: var(--ion-color-medium);
+    margin-bottom: 20px;
+  }
+}
+
+.location-item {
+  --background: #f8f9fc;
+  --border-radius: 12px;
+  margin-bottom: 8px;
+
+  h2 {
+    font-weight: 700;
+    font-size: 16px;
   }
 }

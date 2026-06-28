@@ -1,6 +1,9 @@
 ﻿<ion-header>
   <ion-toolbar color="primary">
-    <ion-title>Geolocalización y Mapa</ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Sedes DUOC</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -9,9 +12,18 @@
     <capacitor-google-map #map></capacitor-google-map>
   </div>
 
-  <div class="coords-panel">
-    <h3>Ubicación en tiempo real</h3>
-    <p><b>Latitud:</b> {{ lat }}</p>
-    <p><b>Longitud:</b> {{ lng }}</p>
+  <div class="info-panel ion-padding">
+    <h3 class="panel-title">Explora nuestras sedes</h3>
+    <p class="panel-subtitle">Visualiza la sede más cercana a tu ubicación actual.</p>
+    
+    <ion-list lines="none">
+      <ion-item class="location-item">
+        <ion-icon slot="start" name="pin-outline" color="primary"></ion-icon>
+        <ion-label>
+          <h2>Mi Ubicación</h2>
+          <p>{{ lat | number:"1.4-4" }}, {{ lng | number:"1.4-4" }}</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
   </div>
 </ion-content>
