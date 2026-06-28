@@ -1,57 +1,50 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>Login</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true" class="ion-padding">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Login</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
+﻿<ion-content class="ion-padding">
   <div class="login-container">
     <ion-card>
       <ion-card-header>
-        <ion-card-title>Ingrese sus credenciales</ion-card-title>
+        <ion-card-title>{{ isRegistering ? "Crear Cuenta DUOC Connect" : "Iniciar Sesión" }}</ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        <!-- Campo Usuario -->
-        <div class="form-group">
-          <ion-label>Usuario</ion-label>
-          <ion-input
-            [(ngModel)]="usuario"
-            placeholder="3-8 caracteres alfanuméricos"
-            type="text"
-            maxlength="8">
-          </ion-input>
-          <div class="error-text" *ngIf="usuarioError">
-            {{ usuarioError }}
-          </div>
+        
+        <ion-item lines="full">
+          <ion-label position="stacked">Usuario</ion-label>
+          <ion-input [(ngModel)]="usuario" placeholder="Ej: f.quezada" maxlength="8"></ion-input>
+        </ion-item>
+        
+        <ion-item lines="full">
+          <ion-label position="stacked">PIN (4 dígitos)</ion-label>
+          <ion-input [(ngModel)]="contrasena" type="password" placeholder="****" maxlength="4"></ion-input>
+        </ion-item>
+
+        <div *ngIf="isRegistering">
+          <ion-item lines="full">
+            <ion-label position="stacked">Nombre Completo</ion-label>
+            <ion-input [(ngModel)]="nombre" placeholder="Francisco Quezada"></ion-input>
+          </ion-item>
+
+          <ion-item lines="full">
+            <ion-label position="stacked">Carrera</ion-label>
+            <ion-input [(ngModel)]="carrera" placeholder="Ingeniería en Informática"></ion-input>
+          </ion-item>
+
+          <ion-item lines="full">
+            <ion-label position="stacked">Sede</ion-label>
+            <ion-select [(ngModel)]="sede" placeholder="Selecciona tu sede">
+              <ion-select-option *ngFor="let s of sedes" [value]="s">{{ s }}</ion-select-option>
+            </ion-select>
+          </ion-item>
         </div>
 
-        <!-- Campo Contraseña -->
-        <div class="form-group">
-          <ion-label>Contraseña</ion-label>
-          <ion-input
-            [(ngModel)]="contrasena"
-            placeholder="4 dígitos"
-            type="password"
-            maxlength="4">
-          </ion-input>
-          <div class="error-text" *ngIf="contrasenaError">
-            {{ contrasenaError }}
-          </div>
-        </div>
+        <p class="error-text" *ngIf="usuarioError">{{ usuarioError }}</p>
 
-        <!-- Botones -->
-        <ion-button expand="block" color="primary" (click)="ingresar()">
-          Ingresar
+        <ion-button expand="block" class="ion-margin-top" (click)="isRegistering ? registrar() : ingresar()">
+          {{ isRegistering ? "Registrarse" : "Ingresar" }}
         </ion-button>
-        <ion-button expand="block" color="secondary" (click)="registrar()">
-          Registrarse
+
+        <ion-button expand="block" fill="clear" (click)="toggleMode()">
+          {{ isRegistering ? "¿Ya tienes cuenta? Ingresa" : "¿No tienes cuenta? Regístrate" }}
         </ion-button>
+
       </ion-card-content>
     </ion-card>
   </div>

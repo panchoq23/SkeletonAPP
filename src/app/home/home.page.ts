@@ -5,13 +5,16 @@ import {
   IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, 
   IonMenuButton, IonSegment, IonSegmentButton, IonLabel, 
   IonList, IonItem, IonFab, IonFabButton, IonIcon, IonSpinner,
-  IonAvatar, IonCardHeader, IonCardTitle, IonCardContent
+  IonAvatar, IonCardHeader, IonCardTitle, IonCardContent, IonChip, IonButton
 } from "@ionic/angular/standalone";
 import { PostService, Post } from "../services/post.service";
 import { UserService } from "../services/user.service";
 import { MisDatosComponent } from "./components/mis-datos/mis-datos.component";
 import { addIcons } from "ionicons";
-import { add, thumbsUpOutline, chatbubbleOutline } from "ionicons/icons";
+import { 
+  add, thumbsUpOutline, chatbubbleOutline, 
+  earthOutline, businessOutline, alertCircleOutline 
+} from "ionicons/icons";
 import { Router } from "@angular/router";
 
 @Component({
@@ -23,7 +26,7 @@ import { Router } from "@angular/router";
     IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, 
     IonMenuButton, IonSegment, IonSegmentButton, IonLabel, 
     IonList, IonItem, IonFab, IonFabButton, IonIcon, IonSpinner,
-    IonAvatar, IonCardHeader, IonCardTitle, IonCardContent,
+    IonAvatar, IonCardHeader, IonCardTitle, IonCardContent, IonChip, IonButton,
     MisDatosComponent, CommonModule, FormsModule
   ],
 })
@@ -33,26 +36,50 @@ export class HomePage implements OnInit {
   private readonly router = inject(Router);
 
   usuario: string = "";
+  miSede: string = "";
   selectedSegment: string = "foro";
-  posts: Post[] = [];
+  filterSede: string = "todas"; 
+  
+  allPosts: Post[] = [];
+  filteredPosts: Post[] = [];
 
   constructor() {
-    addIcons({ add, thumbsUpOutline, chatbubbleOutline });
+    addIcons({ 
+      add, thumbsUpOutline, chatbubbleOutline, 
+      earthOutline, businessOutline, alertCircleOutline 
+    });
   }
 
   ngOnInit() {
     const userData = this.userService.getUserData();
     if (userData) {
       this.usuario = userData.usuario;
+      this.miSede = userData.sede || "";
     }
     this.loadPosts();
   }
 
   loadPosts() {
     this.postService.getPosts().subscribe({
-      next: (data) => this.posts = data,
+      next: (data) => {
+        this.allPosts = data;
+        this.applyFilter();
+      },
       error: (err) => console.error("Error cargando posts", err)
     });
+  }
+
+  setFilter(filter: string) {
+    this.filterSede = filter;
+    this.applyFilter();
+  }
+
+  applyFilter() {
+    if (this.filterSede === "mi-sede" && this.miSede) {
+      this.filteredPosts = this.allPosts.filter(p => p.sede === this.miSede);
+    } else {
+      this.filteredPosts = this.allPosts;
+    }
   }
 
   goToCreate() {

@@ -1,11 +1,11 @@
 ﻿import { Component, Input, OnInit, inject } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
-import { IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonInput, IonButton, IonLabel, IonSelect, IonSelectOption, AlertController } from "@ionic/angular/standalone";
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatInputModule } from "@angular/material/input";
-import { MatDatepickerModule } from "@angular/material/datepicker";
-import { MatNativeDateModule } from "@angular/material/core";
+import { 
+  IonCard, IonCardHeader, IonCardTitle, IonCardContent, 
+  IonInput, IonButton, IonLabel, IonSelect, IonSelectOption, 
+  AlertController, IonItem 
+} from "@ionic/angular/standalone";
 import { DBTaskService, User } from "../../../services/dbtask.service";
 
 @Component({
@@ -13,8 +13,8 @@ import { DBTaskService, User } from "../../../services/dbtask.service";
   templateUrl: "./mis-datos.component.html",
   standalone: true,
   imports: [
-    IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonInput, IonButton, IonLabel, IonSelect, IonSelectOption,
-    MatFormFieldModule, MatInputModule, MatDatepickerModule, MatNativeDateModule,
+    IonCard, IonCardHeader, IonCardTitle, IonCardContent, 
+    IonInput, IonButton, IonLabel, IonSelect, IonSelectOption, IonItem,
     CommonModule, FormsModule
   ]
 })
@@ -24,8 +24,12 @@ export class MisDatosComponent implements OnInit {
 
   @Input() usuario: string = "";
 
-  nombre: string = "";
+  nombre:   string = "";
   apellido: string = "";
+  carrera:  string = "";
+  sede:     string = "";
+  sedes: string[] = ["San Joaquín", "Maipú", "Antonio Varas", "Plaza Vespucio", "Puente Alto", "Viña del Mar", "Valparaíso", "Concepción"];
+  
   nivelEducacion: string = "";
   fechaNacimiento: Date | null = null;
 
@@ -34,6 +38,8 @@ export class MisDatosComponent implements OnInit {
     if (data) {
       this.nombre = data.nombre || "";
       this.apellido = data.apellido || "";
+      this.carrera = data.carrera || "";
+      this.sede = data.sede || "";
       this.nivelEducacion = data.nivelEducacion || "";
       if (data.fechaNacimiento) {
         this.fechaNacimiento = new Date(data.fechaNacimiento);
@@ -41,18 +47,13 @@ export class MisDatosComponent implements OnInit {
     }
   }
 
-  limpiar() {
-    this.nombre = "";
-    this.apellido = "";
-    this.nivelEducacion = "";
-    this.fechaNacimiento = null;
-  }
-
   async guardar() {
     const userData: User = {
       usuario: this.usuario,
       nombre: this.nombre,
       apellido: this.apellido,
+      carrera: this.carrera,
+      sede: this.sede,
       nivelEducacion: this.nivelEducacion,
       fechaNacimiento: this.fechaNacimiento ? this.fechaNacimiento.toISOString() : null
     };
@@ -61,7 +62,7 @@ export class MisDatosComponent implements OnInit {
 
     const alert = await this.alertController.create({
       header: "Éxito",
-      message: "Datos guardados correctamente",
+      message: "Perfil actualizado correctamente",
       buttons: ["OK"]
     });
     await alert.present();

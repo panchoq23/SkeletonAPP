@@ -1,69 +1,105 @@
-﻿.reddit-card {
-  margin-bottom: 12px;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+﻿.filter-container {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 8px 0 16px;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.reddit-card {
+  margin-bottom: 16px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   background: var(--ion-card-background, #fff);
+  border: 1px solid var(--ion-color-light);
 }
 
 .card-meta {
   display: flex;
   align-items: center;
   padding: 12px 16px 4px;
-  gap: 8px;
+  gap: 10px;
 
   ion-avatar {
-    width: 24px;
-    height: 24px;
+    width: 32px;
+    height: 32px;
   }
 
-  span {
-    font-size: 12px;
-    color: var(--ion-color-medium);
+  .meta-text {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+
+    span {
+      font-size: 12px;
+      color: var(--ion-color-medium);
+    }
+
+    .author-name {
+      font-weight: 700;
+      color: var(--ion-color-dark);
+    }
+
+    .post-sede {
+      color: var(--ion-color-secondary-shade);
+      font-weight: 500;
+    }
+
+    .separator {
+      opacity: 0.5;
+    }
   }
 }
 
 .card-category {
-  padding: 0 16px;
-  font-size: 11px;
-  font-weight: 700;
+  padding: 4px 16px;
+  font-size: 10px;
+  font-weight: 800;
   color: var(--ion-color-primary);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.8px;
 }
 
 ion-card-header {
-  padding: 8px 16px 4px;
+  padding: 4px 16px;
 
   ion-card-title {
-    font-size: 18px;
-    font-weight: 600;
+    font-size: 19px;
+    font-weight: 700;
     line-height: 1.2;
     color: var(--ion-color-dark);
   }
 }
 
 ion-card-content {
-  padding: 4px 16px 12px;
+  padding: 8px 16px 16px;
   font-size: 14px;
-  line-height: 1.4;
-  color: var(--ion-color-step-600);
+  line-height: 1.5;
+  color: var(--ion-color-step-700);
 }
 
 .card-footer {
   display: flex;
-  gap: 16px;
-  padding: 8px 16px 12px;
+  gap: 20px;
+  padding: 12px 16px;
   border-top: 1px solid var(--ion-color-light);
+  background: var(--ion-color-light-tint, #f9f9f9);
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
 
   .interaction-item {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 6px;
     font-size: 13px;
-    color: var(--ion-color-medium);
-    
+    font-weight: 600;
+    color: var(--ion-color-medium-shade);
+
     ion-icon {
-      font-size: 18px;
+      font-size: 20px;
     }
   }
 }

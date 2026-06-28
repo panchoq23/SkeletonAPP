@@ -6,6 +6,10 @@ export interface User {
   password?: string;
   nombre?: string;
   apellido?: string;
+  correo?: string;
+  carrera?: string;
+  rol?: string;
+  sede?: string;
   nivelEducacion?: string;
   fechaNacimiento?: string | null;
 }
@@ -19,6 +23,7 @@ export interface Post {
   votes?: number;
   repliesCount?: number;
   timestamp?: string;
+  sede?: string;
 }
 
 @Injectable({
@@ -59,6 +64,10 @@ export class DBTaskService {
         password TEXT,
         nombre TEXT,
         apellido TEXT,
+        correo TEXT,
+        carrera TEXT,
+        rol TEXT,
+        sede TEXT,
         nivelEducacion TEXT,
         fechaNacimiento TEXT
       );
@@ -77,7 +86,8 @@ export class DBTaskService {
         category TEXT,
         votes INTEGER,
         repliesCount INTEGER,
-        timestamp TEXT
+        timestamp TEXT,
+        sede TEXT
       );
     `;
     await this.db.execute(schema);
@@ -109,8 +119,16 @@ export class DBTaskService {
   }
 
   async registerUser(user: User) {
-    const sql = "INSERT OR REPLACE INTO users (usuario, password) VALUES (?, ?)";
-    await this.db.run(sql, [user.usuario, user.password]);
+    const sql = "INSERT OR REPLACE INTO users (usuario, password, nombre, correo, carrera, rol, sede) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    await this.db.run(sql, [
+      user.usuario, 
+      user.password, 
+      user.nombre || "", 
+      user.correo || "", 
+      user.carrera || "", 
+      user.rol || "Alumno", 
+      user.sede || ""
+    ]);
   }
 
   async getUser(usuario: string): Promise<User | null> {
@@ -119,13 +137,31 @@ export class DBTaskService {
   }
 
   async saveUserDetails(user: User): Promise<void> {
-    const sql = "UPDATE users SET nombre = ?, apellido = ?, nivelEducacion = ?, fechaNacimiento = ? WHERE usuario = ?";
-    await this.db.run(sql, [user.nombre, user.apellido, user.nivelEducacion, user.fechaNacimiento, user.usuario]);
+    const sql = "UPDATE users SET nombre = ?, apellido = ?, nivelEducacion = ?, fechaNacimiento = ?, carrera = ?, sede = ? WHERE usuario = ?";
+    await this.db.run(sql, [
+      user.nombre, 
+      user.apellido, 
+      user.nivelEducacion, 
+      user.fechaNacimiento, 
+      user.carrera, 
+      user.sede, 
+      user.usuario
+    ]);
   }
 
   async savePostToCache(post: Post) {
-    const sql = "INSERT OR REPLACE INTO posts_cache (id, title, body, author, category, votes, repliesCount, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-    await this.db.run(sql, [post.id, post.title, post.body, post.author, post.category, post.votes, post.repliesCount, post.timestamp]);
+    const sql = "INSERT OR REPLACE INTO posts_cache (id, title, body, author, category, votes, repliesCount, timestamp, sede) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    await this.db.run(sql, [
+      post.id, 
+      post.title, 
+      post.body, 
+      post.author, 
+      post.category, 
+      post.votes, 
+      post.repliesCount, 
+      post.timestamp, 
+      post.sede
+    ]);
   }
 
   async getCachedPosts(): Promise<Post[]> {

@@ -21,15 +21,33 @@
 <ion-content [fullscreen]="true" class="ion-padding">
   <div [ngSwitch]="selectedSegment">
 
-    <!-- Sección Foro (Reddit Style) -->
+    <!-- Sección Foro -->
     <div *ngSwitchCase="'foro'">
 
-      <div *ngFor="let post of posts" class="reddit-card">
+      <!-- Filtros por Sede -->
+      <div class="filter-container">
+        <ion-chip [outline]="filterSede !== 'todas'" color="primary" (click)="setFilter('todas')">
+          <ion-icon name="earth-outline"></ion-icon>
+          <ion-label>Todas las Sedes</ion-label>
+        </ion-chip>
+        <ion-chip [outline]="filterSede !== 'mi-sede'" color="secondary" (click)="setFilter('mi-sede')" *ngIf="miSede">
+          <ion-icon name="business-outline"></ion-icon>
+          <ion-label>Mi Sede: {{ miSede }}</ion-label>
+        </ion-chip>
+      </div>
+
+      <div *ngFor="let post of filteredPosts" class="reddit-card">
         <div class="card-meta">
           <ion-avatar>
-            <img src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+            <img src="https://ionicframework.com/docs/img/demos/avatar.svg" alt="avatar" />
           </ion-avatar>
-          <span>{{ post.author }} · {{ post.timestamp }}</span>
+          <div class="meta-text">
+            <span class="author-name">{{ post.author }}</span>
+            <span class="separator">·</span>
+            <span class="post-sede">{{ post.sede }}</span>
+            <span class="separator">·</span>
+            <span class="timestamp">{{ post.timestamp }}</span>
+          </div>
         </div>
 
         <div class="card-category">{{ post.category }}</div>
@@ -54,9 +72,10 @@
         </div>
       </div>
 
-      <div *ngIf="posts.length === 0" class="ion-text-center">
-        <ion-spinner name="crescent"></ion-spinner>
-        <p>Cargando foro...</p>
+      <div *ngIf="filteredPosts.length === 0" class="ion-text-center ion-padding">
+        <ion-icon name="alert-circle-outline" style="font-size: 48px; color: var(--ion-color-medium);"></ion-icon>
+        <p>No hay publicaciones para mostrar en esta sede.</p>
+        <ion-button fill="clear" (click)="setFilter('todas')">Ver todas las sedes</ion-button>
       </div>
 
       <ion-fab vertical="bottom" horizontal="end" slot="fixed">

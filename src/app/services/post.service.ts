@@ -4,7 +4,7 @@ import { Observable, of, from } from "rxjs";
 import { catchError, map, tap } from "rxjs/operators";
 import { DBTaskService, Post } from "./dbtask.service";
 
-export { Post }; // Re-export Post
+export { Post };
 
 @Injectable({
   providedIn: "root"
@@ -16,6 +16,7 @@ export class PostService {
 
   private categories = ["Programación", "Diseño", "Matemáticas", "Historia", "Física"];
   private authors = ["Juan Pérez", "María González", "Carlos Soto", "Ana Silva", "Diego Torres"];
+  private sedes = ["San Joaquín", "Maipú", "Antonio Varas", "Plaza Vespucio", "Puente Alto", "Viña del Mar", "Valparaíso", "Concepción"];
 
   getPosts(): Observable<Post[]> {
     return this.http.get<Post[]>(this.apiUrl).pipe(
@@ -35,7 +36,8 @@ export class PostService {
       category: post.category || this.categories[Math.floor(Math.random() * this.categories.length)],
       votes: post.votes || Math.floor(Math.random() * 100),
       repliesCount: post.repliesCount || Math.floor(Math.random() * 20),
-      timestamp: post.timestamp || ("Hace " + Math.floor(Math.random() * 12 + 1) + " h")
+      timestamp: post.timestamp || ("Hace " + Math.floor(Math.random() * 12 + 1) + " h"),
+      sede: post.sede || this.sedes[Math.floor(Math.random() * this.sedes.length)]
     };
   }
 

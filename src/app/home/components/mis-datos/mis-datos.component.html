@@ -1,41 +1,38 @@
-<ion-card>
+﻿<ion-card class="profile-card">
   <ion-card-header>
-    <ion-card-title>Mis Datos Personales</ion-card-title>
+    <ion-card-title>Mi Perfil Académico</ion-card-title>
   </ion-card-header>
+  
   <ion-card-content>
-    <div class="form-group">
-      <ion-label>Nombre</ion-label>
-      <ion-input [(ngModel)]="nombre" placeholder="Ingrese su nombre" type="text"></ion-input>
-    </div>
+    <ion-item lines="full">
+      <ion-label position="stacked">Usuario</ion-label>
+      <ion-input [value]="usuario" readonly></ion-input>
+    </ion-item>
 
-    <div class="form-group">
-      <ion-label>Apellido</ion-label>
-      <ion-input [(ngModel)]="apellido" placeholder="Ingrese su apellido" type="text"></ion-input>
-    </div>
+    <ion-item lines="full">
+      <ion-label position="stacked">Nombre</ion-label>
+      <ion-input [(ngModel)]="nombre" placeholder="Tu nombre"></ion-input>
+    </ion-item>
 
-    <div class="form-group">
-      <ion-label>Nivel de Educación</ion-label>
-      <ion-select [(ngModel)]="nivelEducacion" placeholder="Seleccione nivel">
-        <ion-select-option value="primaria">Primaria</ion-select-option>
-        <ion-select-option value="secundaria">Secundaria</ion-select-option>
-        <ion-select-option value="tecnica">Técnica</ion-select-option>
-        <ion-select-option value="universitaria">Universitaria</ion-select-option>
-        <ion-select-option value="posgrado">Posgrado</ion-select-option>
+    <ion-item lines="full">
+      <ion-label position="stacked">Carrera</ion-label>
+      <ion-input [(ngModel)]="carrera" placeholder="Tu carrera"></ion-input>
+    </ion-item>
+
+    <ion-item lines="full">
+      <ion-label position="stacked">Sede</ion-label>
+      <ion-select [(ngModel)]="sede" placeholder="Tu sede">
+        <ion-select-option *ngFor="let s of sedes" [value]="s">{{ s }}</ion-select-option>
       </ion-select>
-    </div>
+    </ion-item>
 
-    <div class="form-group">
-      <mat-form-field appearance="outline" class="w-full">
-        <mat-label>Fecha de Nacimiento</mat-label>
-        <input matInput [matDatepicker]="picker" [(ngModel)]="fechaNacimiento" placeholder="Seleccione fecha">
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-      </mat-form-field>
-    </div>
+    <ion-item lines="full">
+      <ion-label position="stacked">Nivel Educación</ion-label>
+      <ion-input [(ngModel)]="nivelEducacion" placeholder="Tu nivel de educación"></ion-input>
+    </ion-item>
 
-    <div class="button-group">
-      <ion-button expand="block" color="medium" (click)="limpiar()">Limpiar</ion-button>
-      <ion-button expand="block" color="success" (click)="guardar()">Guardar</ion-button>
-    </div>
+    <ion-button expand="block" class="ion-margin-top" (click)="guardar()">
+      Guardar Cambios
+    </ion-button>
   </ion-card-content>
 </ion-card>

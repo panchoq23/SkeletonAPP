@@ -4,7 +4,7 @@ import { FormsModule } from "@angular/forms";
 import {
   IonContent, IonHeader, IonTitle, IonToolbar, IonInput, IonButton,
   IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonLabel,
-  NavController, AlertController
+  IonSelect, IonSelectOption, NavController, AlertController
 } from "@ionic/angular/standalone";
 import { DBTaskService } from "../services/dbtask.service";
 import { UserService } from "../services/user.service";
@@ -18,7 +18,7 @@ import { StorageService } from "../services/storage.service";
   imports: [
     IonContent, IonHeader, IonTitle, IonToolbar, IonInput, IonButton,
     IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonLabel,
-    CommonModule, FormsModule
+    IonSelect, IonSelectOption, CommonModule, FormsModule
   ]
 })
 export class LoginPage implements OnInit {
@@ -28,11 +28,19 @@ export class LoginPage implements OnInit {
   private readonly dbTaskService    = inject(DBTaskService);
   private readonly alertController  = inject(AlertController);
 
-  usuario:   string = "";
+  usuario:    string = "";
   contrasena: string = "";
 
-  usuarioError:   string = "";
+  // Campos adicionales para registro
+  nombre:   string = "";
+  correo:   string = "";
+  carrera:  string = "";
+  sede:     string = "";
+  sedes: string[] = ["San Joaquín", "Maipú", "Antonio Varas", "Plaza Vespucio", "Puente Alto", "Viña del Mar", "Valparaíso", "Concepción"];
+
+  usuarioError:    string = "";
   contrasenaError: string = "";
+  isRegistering:   boolean = false;
 
   async ngOnInit() {
     const lastUser = await this.storageService.get("last_user");
@@ -41,9 +49,12 @@ export class LoginPage implements OnInit {
     }
   }
 
+  toggleMode() {
+    this.isRegistering = !this.isRegistering;
+  }
+
   validarUsuario(): boolean {
     this.usuarioError = "";
-
     if (!this.usuario || this.usuario.trim().length === 0) {
       this.usuarioError = "El usuario es obligatorio";
       return false;
@@ -52,30 +63,13 @@ export class LoginPage implements OnInit {
       this.usuarioError = "Mínimo 3 caracteres";
       return false;
     }
-    if (this.usuario.length > 8) {
-      this.usuarioError = "Máximo 8 caracteres";
-      return false;
-    }
-    if (!/^[a-zA-Z0-9]+$/.test(this.usuario)) {
-      this.usuarioError = "Solo caracteres alfanuméricos";
-      return false;
-    }
     return true;
   }
 
   validarContrasena(): boolean {
     this.contrasenaError = "";
-
-    if (!this.contrasena || this.contrasena.trim().length === 0) {
-      this.contrasenaError = "La contraseña es obligatoria";
-      return false;
-    }
-    if (this.contrasena.length !== 4) {
-      this.contrasenaError = "Debe tener exactamente 4 dígitos";
-      return false;
-    }
-    if (!/^\d{4}$/.test(this.contrasena)) {
-      this.contrasenaError = "Solo números (0-9)";
+    if (!this.contrasena || this.contrasena.length !== 4) {
+      this.contrasenaError = "Debe tener 4 dígitos";
       return false;
     }
     return true;
@@ -88,37 +82,44 @@ export class LoginPage implements OnInit {
     if (user) {
       await this.dbTaskService.registerSession(this.usuario, this.contrasena);
       await this.storageService.set("last_user", this.usuario);
-      this.userService.setUserData({ usuario: this.usuario });
+      this.userService.setUserData(user);
       this.navCtrl.navigateRoot("/home");
     } else {
-      this.usuarioError = "Usuario o contraseña incorrectos";
+      this.usuarioError = "Credenciales incorrectas";
     }
   }
 
   async registrar() {
     if (!this.validarUsuario() || !this.validarContrasena()) return;
+    if (!this.sede) {
+      this.usuarioError = "Debe seleccionar una sede";
+      return;
+    }
 
     const existe = await this.dbTaskService.userExists(this.usuario);
     if (existe) {
       const alert = await this.alertController.create({
         header: "Usuario existente",
-        message: `El usuario \"${this.usuario}\" ya está registrado. ¿Desea iniciar sesión en su lugar?`,
-        buttons: [
-          { text: "Cancelar", role: "cancel" },
-          { text: "Ingresar", handler: () => this.ingresar() }
-        ]
+        message: "Use otro nombre de usuario.",
+        buttons: ["OK"]
       });
       await alert.present();
       return;
     }
 
-    await this.dbTaskService.registerUser({
+    const newUser = {
       usuario: this.usuario,
-      password: this.contrasena
-    });
+      password: this.contrasena,
+      nombre: this.nombre,
+      correo: this.correo,
+      carrera: this.carrera,
+      sede: this.sede,
+      rol: "Alumno"
+    };
+
+    await this.dbTaskService.registerUser(newUser);
     await this.dbTaskService.registerSession(this.usuario, this.contrasena);
-    await this.storageService.set("last_user", this.usuario);
-    this.userService.setUserData({ usuario: this.usuario });
+    this.userService.setUserData(newUser);
     this.navCtrl.navigateRoot("/home");
   }
 }
