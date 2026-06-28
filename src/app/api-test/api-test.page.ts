@@ -4,7 +4,7 @@ import { FormsModule } from "@angular/forms";
 import { 
   IonContent, IonHeader, IonTitle, IonToolbar, IonList, 
   IonItem, IonLabel, IonInput, IonButton, IonIcon, 
-  IonCard, IonCardHeader, IonCardTitle, IonCardContent, NavController 
+  IonCard, IonCardHeader, IonCardTitle, IonCardContent, NavController, IonButtons 
 } from "@ionic/angular/standalone";
 import { PostService, Post } from "../services/post.service";
 import { CameraService } from "../services/camera.service";
@@ -18,7 +18,7 @@ import { add, trash, pencil, camera, arrowBack } from "ionicons/icons";
   imports: [
     IonContent, IonHeader, IonTitle, IonToolbar, IonList, 
     IonItem, IonLabel, IonInput, IonButton, IonIcon, 
-    IonCard, IonCardHeader, IonCardTitle, IonCardContent, 
+    IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButtons,
     CommonModule, FormsModule
   ]
 })
