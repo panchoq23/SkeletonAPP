@@ -64,7 +64,6 @@ export class DBTaskService {
         active INTEGER NOT NULL
       );
 
-      -- Nueva tabla para cache de posts de DUOC Connect
       CREATE TABLE IF NOT EXISTS posts_cache (
         id INTEGER PRIMARY KEY,
         title TEXT,
@@ -84,6 +83,11 @@ export class DBTaskService {
     return res.values && res.values.length > 0 ? res.values[0] as User : null;
   }
 
+  async userExists(usuario: string): Promise<boolean> {
+    const res = await this.db.query("SELECT usuario FROM users WHERE usuario = ?", [usuario]);
+    return !!(res.values && res.values.length > 0);
+  }
+
   async registerSession(usuario: string, password: string) {
     await this.db.run("UPDATE sesion_data SET active = 0");
     await this.db.run("INSERT OR REPLACE INTO sesion_data (user_name, password, active) VALUES (?, ?, 1)", [usuario, password]);
@@ -99,7 +103,16 @@ export class DBTaskService {
     await this.db.run(sql, [user.usuario, user.password]);
   }
 
-  // MÃ©todos de cache para DUOC Connect
+  async getUser(usuario: string): Promise<User | null> {
+    const res = await this.db.query("SELECT * FROM users WHERE usuario = ?", [usuario]);
+    return res.values && res.values.length > 0 ? res.values[0] as User : null;
+  }
+
+  async saveUserDetails(user: User): Promise<void> {
+    const sql = "UPDATE users SET nombre = ?, apellido = ?, nivelEducacion = ?, fechaNacimiento = ? WHERE usuario = ?";
+    await this.db.run(sql, [user.nombre, user.apellido, user.nivelEducacion, user.fechaNacimiento, user.usuario]);
+  }
+
   async savePostToCache(post: Post) {
     const sql = "INSERT OR REPLACE INTO posts_cache (id, title, body) VALUES (?, ?, ?)";
     await this.db.run(sql, [post.id, post.title, post.body]);
