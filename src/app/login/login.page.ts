@@ -4,11 +4,13 @@ import { FormsModule } from "@angular/forms";
 import {
   IonContent, IonHeader, IonTitle, IonToolbar, IonInput, IonButton,
   IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonLabel,
-  IonSelect, IonSelectOption, IonItem, NavController, AlertController
+  IonSelect, IonSelectOption, IonItem, IonIcon, NavController, AlertController
 } from "@ionic/angular/standalone";
 import { DBTaskService } from "../services/dbtask.service";
 import { UserService } from "../services/user.service";
 import { StorageService } from "../services/storage.service";
+import { addIcons } from "ionicons";
+import { personOutline, lockClosedOutline, schoolOutline, businessOutline, idCardOutline } from "ionicons/icons";
 
 @Component({
   selector: "app-login",
@@ -18,7 +20,7 @@ import { StorageService } from "../services/storage.service";
   imports: [
     IonContent, IonHeader, IonTitle, IonToolbar, IonInput, IonButton,
     IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonLabel,
-    IonSelect, IonSelectOption, IonItem, CommonModule, FormsModule
+    IonSelect, IonSelectOption, IonItem, IonIcon, CommonModule, FormsModule
   ]
 })
 export class LoginPage implements OnInit {
@@ -30,16 +32,17 @@ export class LoginPage implements OnInit {
 
   usuario:    string = "";
   contrasena: string = "";
-
-  nombre:   string = "";
-  correo:   string = "";
-  carrera:  string = "";
-  sede:     string = "";
+  nombre:     string = "";
+  carrera:    string = "";
+  sede:       string = "";
   sedes: string[] = ["San Joaquín", "Maipú", "Antonio Varas", "Plaza Vespucio", "Puente Alto", "Viña del Mar", "Valparaíso", "Concepción"];
 
   usuarioError:    string = "";
-  contrasenaError: string = "";
   isRegistering:   boolean = false;
+
+  constructor() {
+    addIcons({ personOutline, lockClosedOutline, schoolOutline, businessOutline, idCardOutline });
+  }
 
   async ngOnInit() {
     const lastUser = await this.storageService.get("last_user");
@@ -50,28 +53,14 @@ export class LoginPage implements OnInit {
 
   toggleMode() {
     this.isRegistering = !this.isRegistering;
-  }
-
-  validarUsuario(): boolean {
     this.usuarioError = "";
-    if (!this.usuario || this.usuario.trim().length === 0) {
-      this.usuarioError = "El usuario es obligatorio";
-      return false;
-    }
-    return true;
-  }
-
-  validarContrasena(): boolean {
-    this.contrasenaError = "";
-    if (!this.contrasena || this.contrasena.length !== 4) {
-      this.contrasenaError = "Debe tener 4 dígitos";
-      return false;
-    }
-    return true;
   }
 
   async ingresar() {
-    if (!this.validarUsuario() || !this.validarContrasena()) return;
+    if (!this.usuario || !this.contrasena) {
+      this.usuarioError = "Completa todos los campos";
+      return;
+    }
 
     const user = await this.dbTaskService.validateUser(this.usuario, this.contrasena);
     if (user) {
@@ -85,20 +74,14 @@ export class LoginPage implements OnInit {
   }
 
   async registrar() {
-    if (!this.validarUsuario() || !this.validarContrasena()) return;
-    if (!this.sede) {
-      this.usuarioError = "Debe seleccionar una sede";
+    if (!this.usuario || !this.contrasena || !this.sede) {
+      this.usuarioError = "Completa todos los campos obligatorios";
       return;
     }
 
     const existe = await this.dbTaskService.userExists(this.usuario);
     if (existe) {
-      const alert = await this.alertController.create({
-        header: "Usuario existente",
-        message: "Use otro nombre de usuario.",
-        buttons: ["OK"]
-      });
-      await alert.present();
+      this.usuarioError = "El usuario ya existe";
       return;
     }
 
@@ -106,7 +89,6 @@ export class LoginPage implements OnInit {
       usuario: this.usuario,
       password: this.contrasena,
       nombre: this.nombre,
-      correo: this.correo,
       carrera: this.carrera,
       sede: this.sede,
       rol: "Alumno"

@@ -1,51 +1,75 @@
 ﻿<ion-content class="ion-padding">
-  <div class="login-container">
-    <ion-card>
+  <div class="login-wrapper">
+    
+    <!-- Header de Branding -->
+    <div class="branding-container">
+      <div class="logo-placeholder">
+        <img src="https://www.duoc.cl/wp-content/uploads/2019/04/logo-duoc.png" alt="Logo DUOC" class="main-logo">
+      </div>
+      <h1 class="app-title">DUOC Connect</h1>
+      <p class="app-subtitle">Foro académico para estudiantes y docentes</p>
+    </div>
+
+    <!-- Card de Login/Registro -->
+    <ion-card class="login-card">
       <ion-card-header>
-        <ion-card-title>{{ isRegistering ? "Crear Cuenta DUOC Connect" : "Iniciar Sesión" }}</ion-card-title>
+        <ion-card-title>{{ isRegistering ? "Crear Cuenta" : "Bienvenido de nuevo" }}</ion-card-title>
       </ion-card-header>
+
       <ion-card-content>
-        
-        <ion-item lines="full">
-          <ion-label position="stacked">Usuario</ion-label>
-          <ion-input [(ngModel)]="usuario" placeholder="Ej: f.quezada" maxlength="8"></ion-input>
-        </ion-item>
-        
-        <ion-item lines="full">
-          <ion-label position="stacked">PIN (4 dígitos)</ion-label>
-          <ion-input [(ngModel)]="contrasena" type="password" placeholder="****" maxlength="4"></ion-input>
-        </ion-item>
-
-        <div *ngIf="isRegistering">
-          <ion-item lines="full">
-            <ion-label position="stacked">Nombre Completo</ion-label>
-            <ion-input [(ngModel)]="nombre" placeholder="Francisco Quezada"></ion-input>
+        <div class="form-container">
+          
+          <ion-item lines="none" class="custom-input">
+            <ion-icon name="person-outline" slot="start"></ion-icon>
+            <ion-input [(ngModel)]="usuario" placeholder="Nombre de usuario" maxlength="8"></ion-input>
           </ion-item>
 
-          <ion-item lines="full">
-            <ion-label position="stacked">Carrera</ion-label>
-            <ion-input [(ngModel)]="carrera" placeholder="Ingeniería en Informática"></ion-input>
+          <ion-item lines="none" class="custom-input">
+            <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+            <ion-input [(ngModel)]="contrasena" type="password" placeholder="PIN (4 dígitos)" maxlength="4"></ion-input>
           </ion-item>
 
-          <ion-item lines="full">
-            <ion-label position="stacked">Sede</ion-label>
-            <ion-select [(ngModel)]="sede" placeholder="Selecciona tu sede">
-              <ion-select-option *ngFor="let s of sedes" [value]="s">{{ s }}</ion-select-option>
-            </ion-select>
-          </ion-item>
+          <!-- Campos extras de registro -->
+          <div *ngIf="isRegistering" class="extra-fields animate__animated animate__fadeIn">
+            <ion-item lines="none" class="custom-input">
+              <ion-icon name="id-card-outline" slot="start"></ion-icon>
+              <ion-input [(ngModel)]="nombre" placeholder="Nombre completo"></ion-input>
+            </ion-item>
+
+            <ion-item lines="none" class="custom-input">
+              <ion-icon name="school-outline" slot="start"></ion-icon>
+              <ion-input [(ngModel)]="carrera" placeholder="Carrera"></ion-input>
+            </ion-item>
+
+            <ion-item lines="none" class="custom-input">
+              <ion-icon name="business-outline" slot="start"></ion-icon>
+              <ion-select [(ngModel)]="sede" placeholder="Selecciona tu sede" interface="popover">
+                <ion-select-option *ngFor="let s of sedes" [value]="s">{{ s }}</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </div>
+
+          <p class="error-msg" *ngIf="usuarioError">{{ usuarioError }}</p>
+
+          <ion-button expand="block" class="main-btn" (click)="isRegistering ? registrar() : ingresar()">
+            {{ isRegistering ? "Registrarse ahora" : "Ingresar" }}
+          </ion-button>
+
+          <div class="divider">
+            <span class="divider-text">o</span>
+          </div>
+
+          <ion-button expand="block" fill="clear" color="medium" (click)="toggleMode()">
+            {{ isRegistering ? "¿Ya tienes cuenta? Inicia sesión" : "¿No tienes cuenta? Regístrate aquí" }}
+          </ion-button>
+
         </div>
-
-        <p class="error-text" *ngIf="usuarioError">{{ usuarioError }}</p>
-
-        <ion-button expand="block" class="ion-margin-top" (click)="isRegistering ? registrar() : ingresar()">
-          {{ isRegistering ? "Registrarse" : "Ingresar" }}
-        </ion-button>
-
-        <ion-button expand="block" fill="clear" (click)="toggleMode()">
-          {{ isRegistering ? "¿Ya tienes cuenta? Ingresa" : "¿No tienes cuenta? Regístrate" }}
-        </ion-button>
-
       </ion-card-content>
     </ion-card>
+
+    <div class="footer-info">
+      <p>© 2026 DUOC UC · IP & CFT</p>
+    </div>
+
   </div>
 </ion-content>
