@@ -13,9 +13,9 @@ import { MisDatosComponent } from "./components/mis-datos/mis-datos.component";
 import { addIcons } from "ionicons";
 import { 
   add, thumbsUpOutline, chatbubbleOutline, 
-  earthOutline, businessOutline, alertCircleOutline 
+  earthOutline, businessOutline, alertCircleOutline, closeCircle 
 } from "ionicons/icons";
-import { Router } from "@angular/router";
+import { Router, RouterModule, ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: "app-home",
@@ -27,18 +27,20 @@ import { Router } from "@angular/router";
     IonMenuButton, IonSegment, IonSegmentButton, IonLabel, 
     IonList, IonItem, IonFab, IonFabButton, IonIcon, IonSpinner,
     IonAvatar, IonCardHeader, IonCardTitle, IonCardContent, IonChip, IonButton,
-    MisDatosComponent, CommonModule, FormsModule
+    MisDatosComponent, CommonModule, FormsModule, RouterModule
   ],
 })
 export class HomePage implements OnInit {
   private readonly postService = inject(PostService);
   private readonly userService = inject(UserService);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
 
   usuario: string = "";
   miSede: string = "";
   selectedSegment: string = "foro";
   filterSede: string = "todas"; 
+  filterCategory: string | null = null;
   
   allPosts: Post[] = [];
   filteredPosts: Post[] = [];
@@ -46,7 +48,7 @@ export class HomePage implements OnInit {
   constructor() {
     addIcons({ 
       add, thumbsUpOutline, chatbubbleOutline, 
-      earthOutline, businessOutline, alertCircleOutline 
+      earthOutline, businessOutline, alertCircleOutline, closeCircle 
     });
   }
 
@@ -56,7 +58,18 @@ export class HomePage implements OnInit {
       this.usuario = userData.usuario;
       this.miSede = userData.sede || "";
     }
-    this.loadPosts();
+
+    this.route.queryParams.subscribe(params => {
+      if (params["segment"]) {
+        this.selectedSegment = params["segment"];
+      }
+      if (params["category"]) {
+        this.filterCategory = params["category"];
+      } else {
+        this.filterCategory = null;
+      }
+      this.loadPosts();
+    });
   }
 
   loadPosts() {
@@ -75,11 +88,21 @@ export class HomePage implements OnInit {
   }
 
   applyFilter() {
+    let result = this.allPosts;
+
     if (this.filterSede === "mi-sede" && this.miSede) {
-      this.filteredPosts = this.allPosts.filter(p => p.sede === this.miSede);
-    } else {
-      this.filteredPosts = this.allPosts;
+      result = result.filter(p => p.sede === this.miSede);
     }
+
+    if (this.filterCategory) {
+      result = result.filter(p => p.category === this.filterCategory);
+    }
+
+    this.filteredPosts = result;
+  }
+
+  clearCategory() {
+    this.router.navigate([], { queryParams: { category: null }, queryParamsHandling: "merge" });
   }
 
   goToCreate() {
