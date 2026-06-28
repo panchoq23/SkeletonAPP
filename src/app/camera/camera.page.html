@@ -1,22 +1,22 @@
 ﻿<ion-header>
-  <ion-toolbar color='primary'>
+  <ion-toolbar color="primary">
     <ion-title>Cámara</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class='ion-padding ion-text-center'>
-  <div class='camera-container'>
-    <ion-button expand='block' (click)='takePhoto()'>
-      <ion-icon slot='start' name='camera'></ion-icon>
+<ion-content class="ion-padding ion-text-center">
+  <div class="camera-container">
+    <ion-button expand="block" (click)="takePhoto()">
+      <ion-icon slot="start" name="camera"></ion-icon>
       Tomar Foto
     </ion-button>
 
-    <div class='photo-preview' *ngIf='photo'>
+    <div class="photo-preview" *ngIf="photo">
       <h3>Previsualización:</h3>
-      <ion-img [src]='photo'></ion-img>
+      <ion-img [src]="photo"></ion-img>
     </div>
 
-    <div class='no-photo' *ngIf='!photo'>
+    <div class="no-photo" *ngIf="!photo">
       <p>No se ha tomado ninguna foto aún.</p>
     </div>
   </div>
