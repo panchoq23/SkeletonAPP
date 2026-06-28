@@ -1,10 +1,8 @@
-import { Injectable, inject } from "@angular/core";
+﻿import { Injectable, inject } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable, of, from } from "rxjs";
-import { catchError, tap } from "rxjs/operators";
+import { catchError, map, tap } from "rxjs/operators";
 import { DBTaskService, Post } from "./dbtask.service";
-
-export { Post }; // Re-export Post for other components
 
 @Injectable({
   providedIn: "root"
@@ -14,14 +12,29 @@ export class PostService {
   private dbTask = inject(DBTaskService);
   private apiUrl = "https://jsonplaceholder.typicode.com/posts";
 
+  private categories = ["Programación", "Diseño", "Matemáticas", "Historia", "Física"];
+  private authors = ["Juan Pérez", "María González", "Carlos Soto", "Ana Silva", "Diego Torres"];
+
   getPosts(): Observable<Post[]> {
     return this.http.get<Post[]>(this.apiUrl).pipe(
-      tap(posts => this.cachePosts(posts.slice(0, 10))),
+      map(posts => posts.slice(0, 10).map(post => this.enrichPost(post))),
+      tap(posts => this.cachePosts(posts)),
       catchError(() => {
-        console.warn("API fall�, cargando desde cache local...");
+        console.warn("API falló, cargando desde cache local...");
         return from(this.dbTask.getCachedPosts());
       })
     );
+  }
+
+  private enrichPost(post: Post): Post {
+    return {
+      ...post,
+      author: this.authors[Math.floor(Math.random() * this.authors.length)],
+      category: this.categories[Math.floor(Math.random() * this.categories.length)],
+      votes: Math.floor(Math.random() * 100),
+      repliesCount: Math.floor(Math.random() * 20),
+      timestamp: "Hace " + Math.floor(Math.random() * 12 + 1) + " h"
+    };
   }
 
   private async cachePosts(posts: Post[]) {
@@ -31,11 +44,12 @@ export class PostService {
   }
 
   createPost(post: Post): Observable<Post> {
-    return this.http.post<Post>(this.apiUrl, post).pipe(
+    const enriched = this.enrichPost(post);
+    return this.http.post<Post>(this.apiUrl, enriched).pipe(
       tap(async (newPost) => await this.dbTask.savePostToCache(newPost)),
       catchError(() => {
         console.warn("Offline: Guardando post solo localmente");
-        return of(post);
+        return of(enriched);
       })
     );
   }

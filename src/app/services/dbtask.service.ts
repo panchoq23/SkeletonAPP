@@ -14,6 +14,11 @@ export interface Post {
   id?: number;
   title: string;
   body: string;
+  author?: string;
+  category?: string;
+  votes?: number;
+  repliesCount?: number;
+  timestamp?: string;
 }
 
 @Injectable({
@@ -67,7 +72,12 @@ export class DBTaskService {
       CREATE TABLE IF NOT EXISTS posts_cache (
         id INTEGER PRIMARY KEY,
         title TEXT,
-        body TEXT
+        body TEXT,
+        author TEXT,
+        category TEXT,
+        votes INTEGER,
+        repliesCount INTEGER,
+        timestamp TEXT
       );
     `;
     await this.db.execute(schema);
@@ -114,8 +124,8 @@ export class DBTaskService {
   }
 
   async savePostToCache(post: Post) {
-    const sql = "INSERT OR REPLACE INTO posts_cache (id, title, body) VALUES (?, ?, ?)";
-    await this.db.run(sql, [post.id, post.title, post.body]);
+    const sql = "INSERT OR REPLACE INTO posts_cache (id, title, body, author, category, votes, repliesCount, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    await this.db.run(sql, [post.id, post.title, post.body, post.author, post.category, post.votes, post.repliesCount, post.timestamp]);
   }
 
   async getCachedPosts(): Promise<Post[]> {
