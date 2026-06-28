@@ -4,6 +4,8 @@ import { Observable, of, from } from "rxjs";
 import { catchError, map, tap } from "rxjs/operators";
 import { DBTaskService, Post } from "./dbtask.service";
 
+export { Post }; // Re-export Post
+
 @Injectable({
   providedIn: "root"
 })
@@ -29,11 +31,11 @@ export class PostService {
   private enrichPost(post: Post): Post {
     return {
       ...post,
-      author: this.authors[Math.floor(Math.random() * this.authors.length)],
-      category: this.categories[Math.floor(Math.random() * this.categories.length)],
-      votes: Math.floor(Math.random() * 100),
-      repliesCount: Math.floor(Math.random() * 20),
-      timestamp: "Hace " + Math.floor(Math.random() * 12 + 1) + " h"
+      author: post.author || this.authors[Math.floor(Math.random() * this.authors.length)],
+      category: post.category || this.categories[Math.floor(Math.random() * this.categories.length)],
+      votes: post.votes || Math.floor(Math.random() * 100),
+      repliesCount: post.repliesCount || Math.floor(Math.random() * 20),
+      timestamp: post.timestamp || ("Hace " + Math.floor(Math.random() * 12 + 1) + " h")
     };
   }
 
