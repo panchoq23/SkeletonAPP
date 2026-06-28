@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, inject } from '@angular/core';
+﻿import { Component, Input, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonInput, IonButton, IonLabel, IonSelect, IonSelectOption, AlertController } from '@ionic/angular/standalone';
@@ -6,7 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import { DBTaskService } from '../../../services/dbtask.service';
+import { DBTaskService, User } from '../../../services/dbtask.service';
 
 @Component({
   selector: 'app-mis-datos',
@@ -49,13 +49,15 @@ export class MisDatosComponent implements OnInit {
   }
 
   async guardar() {
-    await this.dbService.saveUserDetails({
+    const userData: User = {
       usuario: this.usuario,
       nombre: this.nombre,
       apellido: this.apellido,
       nivelEducacion: this.nivelEducacion,
       fechaNacimiento: this.fechaNacimiento ? this.fechaNacimiento.toISOString() : null
-    });
+    };
+
+    await this.dbService.saveUserDetails(userData);
 
     const alert = await this.alertController.create({
       header: 'Éxito',
