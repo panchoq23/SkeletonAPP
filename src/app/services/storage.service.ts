@@ -1,34 +1,47 @@
-import { Injectable } from '@angular/core';
-import { Storage } from '@ionic/storage-angular';
+﻿import { Injectable } from "@angular/core";
+import { Storage } from "@ionic/storage-angular";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
 export class StorageService {
   private _storage: Storage | null = null;
+  private _initPromise: Promise<void>;
 
   constructor(private storage: Storage) {
-    this.init();
+    this._initPromise = this.init();
   }
 
-  async init() {
+  private async init(): Promise<void> {
     const storage = await this.storage.create();
     this._storage = storage;
   }
 
-  public async set(key: string, value: any) {
-    await this._storage?.set(key, value);
+  private async ready(): Promise<Storage> {
+    await this._initPromise;
+    if (!this._storage) {
+      throw new Error("Storage no disponible");
+    }
+    return this._storage;
   }
 
-  public async get(key: string) {
-    return await this._storage?.get(key);
+  public async set(key: string, value: any): Promise<void> {
+    const store = await this.ready();
+    await store.set(key, value);
   }
 
-  public async remove(key: string) {
-    await this._storage?.remove(key);
+  public async get(key: string): Promise<any> {
+    const store = await this.ready();
+    return store.get(key);
   }
 
-  public async clear() {
-    await this._storage?.clear();
+  public async remove(key: string): Promise<void> {
+    const store = await this.ready();
+    await store.remove(key);
+  }
+
+  public async clear(): Promise<void> {
+    const store = await this.ready();
+    await store.clear();
   }
 }
