@@ -24,7 +24,7 @@
     <!-- Sección Foro -->
     <div *ngSwitchCase="'foro'">
 
-      <!-- Filtros por Sede -->
+      <!-- Filtros por Sede y Categoría -->
       <div class="filter-container">
         <ion-chip [outline]="filterSede !== 'todas'" color="primary" (click)="setFilter('todas')">
           <ion-icon name="earth-outline"></ion-icon>
@@ -34,9 +34,14 @@
           <ion-icon name="business-outline"></ion-icon>
           <ion-label>Mi Sede: {{ miSede }}</ion-label>
         </ion-chip>
+
+        <ion-chip color="warning" *ngIf="filterCategory" (click)="clearCategory()">
+          <ion-label>{{ filterCategory }}</ion-label>
+          <ion-icon name="close-circle"></ion-icon>
+        </ion-chip>
       </div>
 
-      <div *ngFor="let post of filteredPosts" class="reddit-card">
+      <div *ngFor="let post of filteredPosts" class="reddit-card" [routerLink]="['/post', post.id]">
         <div class="card-meta">
           <ion-avatar>
             <img src="https://ionicframework.com/docs/img/demos/avatar.svg" alt="avatar" />
@@ -74,8 +79,8 @@
 
       <div *ngIf="filteredPosts.length === 0" class="ion-text-center ion-padding">
         <ion-icon name="alert-circle-outline" style="font-size: 48px; color: var(--ion-color-medium);"></ion-icon>
-        <p>No hay publicaciones para mostrar en esta sede.</p>
-        <ion-button fill="clear" (click)="setFilter('todas')">Ver todas las sedes</ion-button>
+        <p>No hay publicaciones para mostrar.</p>
+        <ion-button fill="clear" (click)="setFilter('todas'); clearCategory()">Ver todo</ion-button>
       </div>
 
       <ion-fab vertical="bottom" horizontal="end" slot="fixed">

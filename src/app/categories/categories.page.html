@@ -1,0 +1,23 @@
+﻿<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Categorías</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <h2 class="ion-margin-bottom">Explorar por área</h2>
+  
+  <ion-list lines="inset">
+    <ion-item *ngFor="let cat of categories" (click)="filterByCategory(cat.name)" button>
+      <ion-icon slot="start" [name]="cat.icon" color="primary"></ion-icon>
+      <ion-label>
+        <h2>{{ cat.name }}</h2>
+        <p>Ver publicaciones de {{ cat.name }}</p>
+      </ion-label>
+      <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
+    </ion-item>
+  </ion-list>
+</ion-content>

@@ -10,7 +10,7 @@
         <ion-menu-toggle auto-hide="false">
           <ion-item routerLink="/home" routerDirection="root">
             <ion-icon slot="start" name="home-outline"></ion-icon>
-            <ion-label>Inicio (Foro)</ion-label>
+            <ion-label>Inicio</ion-label>
           </ion-item>
         </ion-menu-toggle>
         
@@ -22,9 +22,30 @@
         </ion-menu-toggle>
 
         <ion-menu-toggle auto-hide="false">
+          <ion-item routerLink="/categories" routerDirection="forward">
+            <ion-icon slot="start" name="list-outline"></ion-icon>
+            <ion-label>Categorías</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle auto-hide="false">
+          <ion-item (click)="goToProfile()" button>
+            <ion-icon slot="start" name="person-outline"></ion-icon>
+            <ion-label>Mi Perfil</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle auto-hide="false">
           <ion-item routerLink="/map" routerDirection="forward">
             <ion-icon slot="start" name="map-outline"></ion-icon>
             <ion-label>Mapa y Sedes</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle auto-hide="false">
+          <ion-item routerLink="/camera" routerDirection="forward">
+            <ion-icon slot="start" name="camera-outline"></ion-icon>
+            <ion-label>Cámara</ion-label>
           </ion-item>
         </ion-menu-toggle>
 
