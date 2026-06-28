@@ -4,7 +4,7 @@ import { FormsModule } from "@angular/forms";
 import {
   IonContent, IonHeader, IonTitle, IonToolbar, IonInput, IonButton,
   IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonLabel,
-  IonSelect, IonSelectOption, NavController, AlertController
+  IonSelect, IonSelectOption, IonItem, NavController, AlertController
 } from "@ionic/angular/standalone";
 import { DBTaskService } from "../services/dbtask.service";
 import { UserService } from "../services/user.service";
@@ -18,7 +18,7 @@ import { StorageService } from "../services/storage.service";
   imports: [
     IonContent, IonHeader, IonTitle, IonToolbar, IonInput, IonButton,
     IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonLabel,
-    IonSelect, IonSelectOption, CommonModule, FormsModule
+    IonSelect, IonSelectOption, IonItem, CommonModule, FormsModule
   ]
 })
 export class LoginPage implements OnInit {
@@ -31,7 +31,6 @@ export class LoginPage implements OnInit {
   usuario:    string = "";
   contrasena: string = "";
 
-  // Campos adicionales para registro
   nombre:   string = "";
   correo:   string = "";
   carrera:  string = "";
@@ -57,10 +56,6 @@ export class LoginPage implements OnInit {
     this.usuarioError = "";
     if (!this.usuario || this.usuario.trim().length === 0) {
       this.usuarioError = "El usuario es obligatorio";
-      return false;
-    }
-    if (this.usuario.length < 3) {
-      this.usuarioError = "Mínimo 3 caracteres";
       return false;
     }
     return true;

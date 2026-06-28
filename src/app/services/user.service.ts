@@ -1,16 +1,20 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+﻿import { Injectable } from "@angular/core";
+import { BehaviorSubject } from "rxjs";
 
 export interface UserData {
   usuario: string;
   nombre?: string;
   apellido?: string;
+  correo?: string;
+  carrera?: string;
+  rol?: string;
+  sede?: string;
   nivelEducacion?: string;
-  fechaNacimiento?: string;
+  fechaNacimiento?: string | null;
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
 export class UserService {
   private userDataSubject = new BehaviorSubject<UserData | null>(null);
