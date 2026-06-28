@@ -1,4 +1,4 @@
-﻿import { Component, inject, OnInit } from "@angular/core";
+import { Component, inject, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { 
@@ -6,7 +6,8 @@ import {
   IonItem, IonLabel, IonInput, IonButton, IonIcon, 
   IonCard, IonCardHeader, IonCardTitle, IonCardContent, NavController, IonButtons 
 } from "@ionic/angular/standalone";
-import { PostService, Post } from "../services/post.service";
+import { PostService } from "../services/post.service";
+import { DBTaskService, Post } from "../services/dbtask.service";
 import { CameraService } from "../services/camera.service";
 import { addIcons } from "ionicons";
 import { add, trash, pencil, camera, arrowBack } from "ionicons/icons";

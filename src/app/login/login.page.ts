@@ -102,7 +102,7 @@ export class LoginPage implements OnInit {
     if (existe) {
       const alert = await this.alertController.create({
         header: "Usuario existente",
-        message: `El usuario "${this.usuario}" ya está registrado. ¿Desea iniciar sesión en su lugar?`,
+        message: `El usuario \"${this.usuario}\" ya está registrado. ¿Desea iniciar sesión en su lugar?`,
         buttons: [
           { text: "Cancelar", role: "cancel" },
           { text: "Ingresar", handler: () => this.ingresar() }
