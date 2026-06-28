@@ -1,0 +1,11 @@
+﻿.camera-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+ion-img {
+  border: 2px solid var(--ion-color-primary);
+  border-radius: 10px;
+  max-height: 400px;
+  object-fit: cover;
+}
