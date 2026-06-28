@@ -1,20 +1,19 @@
-import { Component, inject, OnInit } from "@angular/core";
-import { CommonModule } from "@angular/common";
-import { FormsModule } from "@angular/forms";
+﻿import { Component, inject, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { 
   IonContent, IonHeader, IonTitle, IonToolbar, IonList, 
   IonItem, IonLabel, IonInput, IonButton, IonIcon, 
   IonCard, IonCardHeader, IonCardTitle, IonCardContent, NavController, IonButtons 
-} from "@ionic/angular/standalone";
-import { PostService } from "../services/post.service";
-import { DBTaskService, Post } from "../services/dbtask.service";
-import { CameraService } from "../services/camera.service";
-import { addIcons } from "ionicons";
-import { add, trash, pencil, camera, arrowBack } from "ionicons/icons";
+} from '@ionic/angular/standalone';
+import { PostService, Post } from '../services/post.service';
+import { CameraService } from '../services/camera.service';
+import { addIcons } from 'ionicons';
+import { add, trash, pencil, camera, arrowBack } from 'ionicons/icons';
 
 @Component({
-  selector: "app-api-test",
-  templateUrl: "./api-test.page.html",
+  selector: 'app-api-test',
+  templateUrl: './api-test.page.html',
   standalone: true,
   imports: [
     IonContent, IonHeader, IonTitle, IonToolbar, IonList, 
@@ -29,7 +28,7 @@ export class ApiTestPage implements OnInit {
   private readonly navCtrl = inject(NavController);
 
   posts: Post[] = [];
-  newPost: Post = { title: "", body: "" };
+  newPost: Post = { title: '', body: '' };
   photo: string | undefined = undefined;
 
   constructor() {
@@ -52,7 +51,7 @@ export class ApiTestPage implements OnInit {
     if (!this.newPost.title || !this.newPost.body) return;
     this.postService.createPost(this.newPost).subscribe(() => {
       this.loadPosts();
-      this.newPost = { title: "", body: "" };
+      this.newPost = { title: '', body: '' };
       this.photo = undefined;
       this.navCtrl.back();
     });
