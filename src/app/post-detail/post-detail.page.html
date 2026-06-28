@@ -1,0 +1,84 @@
+﻿<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Detalle de Pregunta</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div *ngIf="post">
+    <ion-card class="reddit-card main-post">
+      <div class="card-meta">
+        <ion-avatar>
+          <img src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+        </ion-avatar>
+        <div class="meta-text">
+          <span class="author-name">{{ post.author }}</span>
+          <span class="separator">·</span>
+          <span class="post-sede">{{ post.sede }}</span>
+          <span class="separator">·</span>
+          <span class="timestamp">{{ post.timestamp }}</span>
+        </div>
+      </div>
+      
+      <div class="card-category">{{ post.category }}</div>
+      
+      <ion-card-header>
+        <ion-card-title>{{ post.title }}</ion-card-title>
+      </ion-card-header>
+      
+      <ion-card-content>
+        <p class="post-body">{{ post.body }}</p>
+      </ion-card-content>
+      
+      <div class="card-footer">
+        <div class="interaction-item">
+          <ion-icon name="thumbs-up-outline"></ion-icon>
+          <span>{{ post.votes }} votos</span>
+        </div>
+        <div class="interaction-item">
+          <ion-icon name="chatbubble-outline"></ion-icon>
+          <span>{{ comments.length }} respuestas</span>
+        </div>
+      </div>
+    </ion-card>
+
+    <h3 class="section-title">Respuestas de la comunidad</h3>
+
+    <div class="comments-list">
+      <div *ngFor="let comment of comments" class="comment-item" [class.correct-answer]="comment.isCorrect">
+        <div class="comment-header">
+          <span class="comment-author">{{ comment.author }}</span>
+          <span class="comment-time">{{ comment.timestamp }}</span>
+          <ion-badge color="success" *ngIf="comment.isCorrect">Correcta</ion-badge>
+        </div>
+        <p class="comment-body">{{ comment.body }}</p>
+        <div class="comment-actions">
+          <ion-button fill="clear" size="small" (click)="markAsCorrect(comment)" *ngIf="!comment.isCorrect">
+            <ion-icon slot="start" name="checkmark-circle"></ion-icon>
+            Marcar como correcta
+          </ion-button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!post" class="ion-text-center">
+    <p>Cargando publicación...</p>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-item lines="none">
+      <ion-input [(ngModel)]="newComment" placeholder="Escribe tu respuesta..." (keyup.enter)="addComment()"></ion-input>
+      <ion-button slot="end" fill="clear" (click)="addComment()">
+        <ion-icon name="send-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-toolbar>
+</ion-footer>

@@ -1,0 +1,64 @@
+﻿.main-post {
+  margin: 0 0 20px 0;
+  border-radius: 12px;
+}
+
+.post-body {
+  font-size: 16px;
+  color: var(--ion-color-dark);
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 20px 0 12px;
+  color: var(--ion-color-step-600);
+}
+
+.comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-bottom: 60px;
+}
+
+.comment-item {
+  padding: 12px;
+  background: #fdfdfd;
+  border-radius: 8px;
+  border: 1px solid var(--ion-color-light);
+  
+  \u0026.correct-answer {
+    border: 2px solid var(--ion-color-success);
+    background: #f0fff4;
+  }
+}
+
+.comment-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+
+  .comment-author {
+    font-weight: 700;
+    font-size: 13px;
+  }
+
+  .comment-time {
+    font-size: 12px;
+    color: var(--ion-color-medium);
+  }
+}
+
+.comment-body {
+  font-size: 14px;
+  margin: 0;
+  color: var(--ion-color-step-800);
+}
+
+.comment-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
