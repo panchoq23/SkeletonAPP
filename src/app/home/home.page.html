@@ -1,45 +1,55 @@
-<ion-header [translucent]="true">
+﻿<ion-header [translucent]="true">
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>SkeletonAPP - Home</ion-title>
+    <ion-title>DUOC Connect</ion-title>
   </ion-toolbar>
 
   <ion-toolbar color="primary">
-    <ion-segment [(ngModel)]="selectedSegment" (ionChange)="segmentChanged($event)">
-      <ion-segment-button value="mis-datos">
-        <ion-label>Mis Datos</ion-label>
+    <ion-segment [(ngModel)]="selectedSegment">
+      <ion-segment-button value="foro">
+        <ion-label>Foro Académico</ion-label>
       </ion-segment-button>
-      <ion-segment-button value="experiencia">
-        <ion-label>Experiencia</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="certificaciones">
-        <ion-label>Certificaciones</ion-label>
+      <ion-segment-button value="perfil">
+        <ion-label>Mi Perfil</ion-label>
       </ion-segment-button>
     </ion-segment>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-  <div class="welcome-text">
-    <h2>Bienvenido, {{ usuario }}</h2>
-  </div>
-
   <div [ngSwitch]="selectedSegment">
-    <app-mis-datos
-      *ngSwitchCase="'mis-datos'"
-      [usuario]="usuario">
-    </app-mis-datos>
+    
+    <!-- Sección Foro (DUOC Connect) -->
+    <div *ngSwitchCase="\"foro\"">
+      <h2>Publicaciones Recientes</h2>
+      
+      <ion-list>
+        <ion-item *ngFor="let post of posts">
+          <ion-label>
+            <h3>{{ post.title }}</h3>
+            <p>{{ post.body }}</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
 
-    <app-experiencia-laboral
-      *ngSwitchCase="'experiencia'"
-      [usuario]="usuario">
-    </app-experiencia-laboral>
+      <div *ngIf="posts.length === 0" class="ion-text-center">
+        <ion-spinner name="crescent"></ion-spinner>
+        <p>Cargando foro...</p>
+      </div>
 
-    <app-certificaciones
-      *ngSwitchCase="'certificaciones'"
-      [usuario]="usuario">
-    </app-certificaciones>
+      <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button (click)="goToCreate()">
+          <ion-icon name="add"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+    </div>
+
+    <!-- Sección Perfil -->
+    <div *ngSwitchCase="\"perfil\"">
+      <app-mis-datos [usuario]="usuario"></app-mis-datos>
+    </div>
+
   </div>
 </ion-content>
