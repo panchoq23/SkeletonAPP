@@ -83,6 +83,6 @@ export class HomePage implements OnInit {
   }
 
   goToCreate() {
-    this.router.navigate(["/api-test"]); 
+    this.router.navigate(["/create-post"]); 
   }
 }

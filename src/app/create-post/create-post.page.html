@@ -1,0 +1,55 @@
+﻿<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Nueva Pregunta</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="create-container">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>¿Qué duda tienes hoy?</ion-card-title>
+      </ion-card-header>
+      
+      <ion-card-content>
+        <ion-item lines="full">
+          <ion-label position="stacked">Título de la duda</ion-label>
+          <ion-input [(ngModel)]="newPost.title" placeholder="Ej: Error en SQLite al inicializar"></ion-input>
+        </ion-item>
+
+        <ion-item lines="full">
+          <ion-label position="stacked">Categoría</ion-label>
+          <ion-select [(ngModel)]="newPost.category" placeholder="Selecciona un área">
+            <ion-select-option *ngFor="let cat of categories" [value]="cat">{{ cat }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        
+        <ion-item lines="full">
+          <ion-label position="stacked">Descripción detallada</ion-label>
+          <ion-textarea [(ngModel)]="newPost.body" rows="4" placeholder="Explica tu problema o pregunta aquí..."></ion-textarea>
+        </ion-item>
+
+        <div class="ion-margin-top">
+          <ion-button expand="block" color="secondary" fill="outline" (click)="takePhoto()">
+            <ion-icon slot="start" name="camera"></ion-icon>
+            {{ photo ? "Cambiar Evidencia" : "Adjuntar Evidencia (Cámara)" }}
+          </ion-button>
+        </div>
+
+        <div *ngIf="photo" class="preview-container ion-margin-top">
+          <img [src]="photo" />
+        </div>
+
+        <ion-button expand="block" class="ion-margin-top publish-btn" (click)="createPost()">
+          <ion-icon slot="start" name="send-outline"></ion-icon>
+          Publicar en el Foro
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>
