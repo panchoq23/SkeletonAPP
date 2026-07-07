@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>DUOC Connect</ion-title>
+    <ion-title>🎓 DUOC Connect</ion-title>
   </ion-toolbar>
 
   <ion-toolbar color="primary">
@@ -18,101 +18,81 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding">
+<ion-content [fullscreen]="true">
   <div [ngSwitch]="selectedSegment">
 
-    <!-- Sección Foro -->
-    <div *ngSwitchCase="'foro'">
+    <!-- SECCIÓN FORO -->
+    <div *ngSwitchCase="'foro'" class="feed-section">
 
-      <!-- Buscador -->
-      <ion-searchbar
-        placeholder="Buscar en el foro..."
-        (ionInput)="onSearch($event)"
-        class="custom-search">
-      </ion-searchbar>
+      <!-- Saludo -->
+      <div class="feed-greeting ion-padding">
+        <h2>Hola, <strong>{{ usuario }}</strong> 👋</h2>
+        <p>Explora las dudas de la comunidad</p>
+      </div>
 
-      <!-- Filtros por Sede y Categoría -->
-      <div class="filter-container">
+      <!-- Filtros -->
+      <div class="filter-bar ion-padding-horizontal">
         <ion-chip [outline]="filterSede !== 'todas'" color="primary" (click)="setFilter('todas')">
           <ion-icon name="earth-outline"></ion-icon>
-          <ion-label>Todas las Sedes</ion-label>
+          <ion-label>Todas las sedes</ion-label>
         </ion-chip>
         <ion-chip [outline]="filterSede !== 'mi-sede'" color="secondary" (click)="setFilter('mi-sede')" *ngIf="miSede">
           <ion-icon name="business-outline"></ion-icon>
-          <ion-label>Mi Sede: {{ miSede }}</ion-label>
+          <ion-label>{{ miSede }}</ion-label>
         </ion-chip>
-
         <ion-chip color="warning" *ngIf="filterCategory" (click)="clearCategory()">
           <ion-label>{{ filterCategory }}</ion-label>
           <ion-icon name="close-circle"></ion-icon>
         </ion-chip>
       </div>
 
-      <!-- Estado de Carga (Skeleton) -->
-      <div *ngIf="cargando">
-        <ion-card *ngFor="let i of [1,2,3]" class="reddit-card">
-          <ion-item lines="none">
-            <ion-avatar slot="start">
-              <ion-skeleton-text [animated]="true"></ion-skeleton-text>
-            </ion-avatar>
-            <ion-label>
-              <ion-skeleton-text [animated]="true" style="width: 50%"></ion-skeleton-text>
-            </ion-label>
-          </ion-item>
-          <ion-card-header>
-            <ion-skeleton-text [animated]="true" style="width: 80%"></ion-skeleton-text>
-          </ion-card-header>
+      <!-- Skeleton mientras carga -->
+      <div *ngIf="cargando" class="skeleton-list ion-padding">
+        <ion-card *ngFor="let i of [1,2,3]" class="skeleton-card">
           <ion-card-content>
-            <ion-skeleton-text [animated]="true" style="width: 100%"></ion-skeleton-text>
-            <ion-skeleton-text [animated]="true" style="width: 70%"></ion-skeleton-text>
+            <ion-skeleton-text animated style="width:30%;height:14px;border-radius:8px;margin-bottom:10px"></ion-skeleton-text>
+            <ion-skeleton-text animated style="width:85%;height:18px;border-radius:8px;margin-bottom:8px"></ion-skeleton-text>
+            <ion-skeleton-text animated style="width:100%;height:14px;border-radius:8px"></ion-skeleton-text>
           </ion-card-content>
         </ion-card>
       </div>
 
-      <!-- Lista de Posts -->
-      <div *ngIf="!cargando">
-        <div *ngFor="let post of filteredPosts" class="reddit-card" [routerLink]="['/post', post.id]">
-          <div class="card-meta">
-            <ion-avatar>
-              <img src="https://ionicframework.com/docs/img/demos/avatar.svg" alt="avatar" />
-            </ion-avatar>
-            <div class="meta-text">
-              <span class="author-name">{{ post.author }}</span>
-              <span class="separator">·</span>
-              <span class="post-sede">{{ post.sede }}</span>
-              <span class="separator">·</span>
-              <span class="timestamp">{{ post.timestamp }}</span>
-            </div>
-          </div>
-
-          <div class="card-category">{{ post.category }}</div>
-
-          <ion-card-header>
-            <ion-card-title>{{ post.title }}</ion-card-title>
-          </ion-card-header>
+      <!-- Lista de posts -->
+      <div *ngIf="!cargando" class="posts-list ion-padding-horizontal">
+        <ion-card
+          *ngFor="let post of filteredPosts"
+          class="post-card"
+          [routerLink]="['/post', post.id]">
 
           <ion-card-content>
-            {{ post.body | slice:0:100 }}...
+            <div class="post-top">
+              <div class="avatar-circle">{{ (post.author ?? '?').charAt(0).toUpperCase() }}</div>
+              <div class="post-meta">
+                <span class="post-author">{{ post.author }}</span>
+                <span class="dot">·</span>
+                <span class="post-sede">{{ post.sede }}</span>
+                <span class="dot">·</span>
+                <span class="post-time">{{ post.timestamp }}</span>
+              </div>
+            </div>
+
+            <div class="category-tag">{{ post.category }}</div>
+            <h3 class="post-title">{{ post.title }}</h3>
+            <p class="post-preview">{{ post.body | slice:0:120 }}...</p>
+
+            <div class="post-stats">
+              <span class="stat"><ion-icon name="thumbs-up-outline"></ion-icon> {{ post.votes }}</span>
+              <span class="stat"><ion-icon name="chatbubble-outline"></ion-icon> {{ post.repliesCount }} respuestas</span>
+            </div>
           </ion-card-content>
+        </ion-card>
 
-          <div class="card-footer">
-            <div class="interaction-item">
-              <ion-icon name="thumbs-up-outline"></ion-icon>
-              <span>{{ post.votes }}</span>
-            </div>
-            <div class="interaction-item">
-              <ion-icon name="chatbubble-outline"></ion-icon>
-              <span>{{ post.repliesCount }} respuestas</span>
-            </div>
-          </div>
+        <!-- Estado vacío -->
+        <div *ngIf="filteredPosts.length === 0" class="empty-state ion-text-center ion-padding">
+          <ion-icon name="alert-circle-outline" style="font-size: 48px; color: var(--ion-color-medium)"></ion-icon>
+          <p>No hay publicaciones para mostrar</p>
+          <ion-button fill="clear" (click)="setFilter('todas'); clearCategory()">Ver todo</ion-button>
         </div>
-      </div>
-
-      <!-- Estado Vacío -->
-      <div *ngIf="!cargando && filteredPosts.length === 0" class="ion-text-center ion-padding empty-state">
-        <ion-icon name="alert-circle-outline" style="font-size: 48px; color: var(--ion-color-medium);"></ion-icon>
-        <p>No encontramos publicaciones para tu búsqueda.</p>
-        <ion-button fill="clear" (click)="setFilter('todas'); clearCategory()">Ver todo</ion-button>
       </div>
 
       <ion-fab vertical="bottom" horizontal="end" slot="fixed">
@@ -122,7 +102,7 @@
       </ion-fab>
     </div>
 
-    <!-- Sección Perfil -->
+    <!-- SECCIÓN PERFIL -->
     <div *ngSwitchCase="'perfil'">
       <app-mis-datos [usuario]="usuario"></app-mis-datos>
     </div>
