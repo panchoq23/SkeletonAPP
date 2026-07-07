@@ -1,4 +1,4 @@
-import { Injectable, inject } from "@angular/core";
+Ôªøimport { Injectable, inject } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable, of, from } from "rxjs";
 import { catchError, map, tap } from "rxjs/operators";
@@ -22,16 +22,16 @@ export class PostService {
   private dbTask = inject(DBTaskService);
   private apiUrl = "https://jsonplaceholder.typicode.com/posts";
 
-  private categories = ["ProgramaciÛn", "DiseÒo", "Matem·ticas", "Historia", "FÌsica"];
-  private authors = ["Juan PÈrez", "MarÌa Gonz·lez", "Carlos Soto", "Ana Silva", "Diego Torres"];
-  private sedes = ["San JoaquÌn", "Maip˙", "Antonio Varas", "Plaza Vespucio", "Puente Alto", "ViÒa del Mar", "ValparaÌso", "ConcepciÛn"];
+  private categories = ["Programaci√≥n", "Dise√±o", "Matem√°ticas", "Historia", "F√≠sica"];
+  private authors = ["Juan P√©rez", "Mar√≠a Gonz√°lez", "Carlos Soto", "Ana Silva", "Diego Torres"];
+  private sedes = ["San Joaqu√≠n", "Maip√∫", "Antonio Varas", "Plaza Vespucio", "Puente Alto", "Vi√±a del Mar", "Valpara√≠so", "Concepci√≥n"];
 
   getPosts(): Observable<Post[]> {
     return this.http.get<Post[]>(this.apiUrl).pipe(
-      map(posts => posts.slice(0, 10).map(post => this.enrichPost(post))),
+      map(posts => posts.slice(0, 15).map(post => this.enrichPost(post))),
       tap(posts => this.cachePosts(posts)),
       catchError(() => {
-        console.warn("API fallÛ, cargando desde cache local...");
+        console.warn("API fall√≥, cargando desde cache local...");
         return from(this.dbTask.getCachedPosts());
       })
     );
@@ -49,14 +49,16 @@ export class PostService {
   }
 
   private enrichPost(post: Post): Post {
+    // Usamos el ID del post para que la aleatoriedad sea determinista (estable)
+    const seed = post.id || 0;
     return {
       ...post,
-      author: post.author || this.authors[Math.floor(Math.random() * this.authors.length)],
-      category: post.category || this.categories[Math.floor(Math.random() * this.categories.length)],
-      votes: post.votes || Math.floor(Math.random() * 100),
-      repliesCount: post.repliesCount || Math.floor(Math.random() * 20),
-      timestamp: post.timestamp || ("Hace " + Math.floor(Math.random() * 12 + 1) + " h"),
-      sede: post.sede || this.sedes[Math.floor(Math.random() * this.sedes.length)]
+      author: post.author || this.authors[seed % this.authors.length],
+      category: post.category || this.categories[seed % this.categories.length],
+      votes: post.votes !== undefined ? post.votes : (seed * 7) % 100,
+      repliesCount: post.repliesCount !== undefined ? post.repliesCount : (seed * 3) % 20,
+      timestamp: post.timestamp || ("Hace " + ((seed % 12) + 1) + " h"),
+      sede: post.sede || this.sedes[seed % this.sedes.length]
     };
   }
 

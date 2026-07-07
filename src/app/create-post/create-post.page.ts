@@ -54,7 +54,6 @@ export class CreatePostPage implements OnInit {
 
   createPost() {
     if (!this.newPost.title || !this.newPost.body || !this.newPost.category) {
-      alert("Por favor completa todos los campos obligatorios");
       return;
     }
     

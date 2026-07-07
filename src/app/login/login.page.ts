@@ -2,9 +2,9 @@
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import {
-  IonContent, IonHeader, IonTitle, IonToolbar, IonInput, IonButton,
-  IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonLabel,
-  IonSelect, IonSelectOption, IonItem, IonIcon, NavController, AlertController
+  IonContent, IonInput, IonButton,
+  IonCard, IonCardHeader, IonCardTitle, IonCardContent,
+  IonSelect, IonSelectOption, IonItem, IonIcon, NavController
 } from "@ionic/angular/standalone";
 import { DBTaskService } from "../services/dbtask.service";
 import { UserService } from "../services/user.service";
@@ -18,8 +18,8 @@ import { personOutline, lockClosedOutline, schoolOutline, businessOutline, idCar
   styleUrls: ["./login.page.scss"],
   standalone: true,
   imports: [
-    IonContent, IonHeader, IonTitle, IonToolbar, IonInput, IonButton,
-    IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonLabel,
+    IonContent, IonInput, IonButton,
+    IonCard, IonCardHeader, IonCardTitle, IonCardContent,
     IonSelect, IonSelectOption, IonItem, IonIcon, CommonModule, FormsModule
   ]
 })
@@ -28,7 +28,6 @@ export class LoginPage implements OnInit {
   private readonly navCtrl          = inject(NavController);
   private readonly storageService   = inject(StorageService);
   private readonly dbTaskService    = inject(DBTaskService);
-  private readonly alertController  = inject(AlertController);
 
   usuario:    string = "";
   contrasena: string = "";

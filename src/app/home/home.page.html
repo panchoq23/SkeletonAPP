@@ -24,6 +24,13 @@
     <!-- Sección Foro -->
     <div *ngSwitchCase="'foro'">
 
+      <!-- Buscador -->
+      <ion-searchbar
+        placeholder="Buscar en el foro..."
+        (ionInput)="onSearch($event)"
+        class="custom-search">
+      </ion-searchbar>
+
       <!-- Filtros por Sede y Categoría -->
       <div class="filter-container">
         <ion-chip [outline]="filterSede !== 'todas'" color="primary" (click)="setFilter('todas')">
@@ -62,7 +69,7 @@
         </ion-card-header>
 
         <ion-card-content>
-          {{ post.body }}
+          {{ post.body | slice:0:100 }}...
         </ion-card-content>
 
         <div class="card-footer">
@@ -77,9 +84,9 @@
         </div>
       </div>
 
-      <div *ngIf="filteredPosts.length === 0" class="ion-text-center ion-padding">
+      <div *ngIf="filteredPosts.length === 0" class="ion-text-center ion-padding empty-state">
         <ion-icon name="alert-circle-outline" style="font-size: 48px; color: var(--ion-color-medium);"></ion-icon>
-        <p>No hay publicaciones para mostrar.</p>
+        <p>No encontramos publicaciones para tu búsqueda.</p>
         <ion-button fill="clear" (click)="setFilter('todas'); clearCategory()">Ver todo</ion-button>
       </div>
 
