@@ -2,55 +2,68 @@
   <ion-menu contentId="main-content" type="overlay">
     <ion-header>
       <ion-toolbar color="primary">
-        <ion-title>DUOC Connect</ion-title>
+        <ion-title>
+          <span style="font-weight:700">🎓 DUOC Connect</span>
+        </ion-title>
       </ion-toolbar>
     </ion-header>
+
     <ion-content>
-      <ion-list>
+      <!-- Avatar de usuario -->
+      <div class="menu-user" *ngIf="usuario">
+        <div class="menu-avatar">{{ usuario.charAt(0).toUpperCase() }}</div>
+        <span class="menu-username">{{ usuario }}</span>
+      </div>
+
+      <ion-list lines="none">
         <ion-menu-toggle auto-hide="false">
-          <ion-item routerLink="/home" routerDirection="root">
+          <ion-item routerLink="/home" routerDirection="root" routerLinkActive="active-item">
             <ion-icon slot="start" name="home-outline"></ion-icon>
             <ion-label>Inicio</ion-label>
           </ion-item>
         </ion-menu-toggle>
-        
+
         <ion-menu-toggle auto-hide="false">
-          <ion-item routerLink="/create-post" routerDirection="forward">
+          <ion-item routerLink="/create-post" routerDirection="forward" routerLinkActive="active-item">
             <ion-icon slot="start" name="add-circle-outline"></ion-icon>
             <ion-label>Nueva Pregunta</ion-label>
           </ion-item>
         </ion-menu-toggle>
 
         <ion-menu-toggle auto-hide="false">
-          <ion-item routerLink="/categories" routerDirection="forward">
+          <ion-item routerLink="/categories" routerDirection="forward" routerLinkActive="active-item">
             <ion-icon slot="start" name="list-outline"></ion-icon>
             <ion-label>Categorías</ion-label>
           </ion-item>
         </ion-menu-toggle>
 
         <ion-menu-toggle auto-hide="false">
-          <ion-item (click)="goToProfile()" button>
+          <ion-item (click)="goToProfile()" button routerLinkActive="active-item">
             <ion-icon slot="start" name="person-outline"></ion-icon>
             <ion-label>Mi Perfil</ion-label>
           </ion-item>
         </ion-menu-toggle>
 
+        <div class="menu-divider"></div>
+
         <ion-menu-toggle auto-hide="false">
-          <ion-item routerLink="/map" routerDirection="forward">
+          <ion-item routerLink="/map" routerDirection="forward" routerLinkActive="active-item">
             <ion-icon slot="start" name="business-outline"></ion-icon>
             <ion-label>Sedes DUOC</ion-label>
           </ion-item>
         </ion-menu-toggle>
 
         <ion-menu-toggle auto-hide="false">
-          <ion-item routerLink="/camera" routerDirection="forward">
+          <ion-item routerLink="/camera" routerDirection="forward" routerLinkActive="active-item">
             <ion-icon slot="start" name="camera-outline"></ion-icon>
             <ion-label>Cámara</ion-label>
           </ion-item>
         </ion-menu-toggle>
 
+        <div class="menu-divider"></div>
+
         <ion-menu-toggle auto-hide="false">
-          <ion-item (click)="logout()" button>
+          <ion-item (click)="logout()" button class="logout-item">
             <ion-icon slot="start" name="log-out-outline"></ion-icon>
             <ion-label>Cerrar Sesión</ion-label>
           </ion-item>
