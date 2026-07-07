@@ -48,43 +48,68 @@
         </ion-chip>
       </div>
 
-      <div *ngFor="let post of filteredPosts" class="reddit-card" [routerLink]="['/post', post.id]">
-        <div class="card-meta">
-          <ion-avatar>
-            <img src="https://ionicframework.com/docs/img/demos/avatar.svg" alt="avatar" />
-          </ion-avatar>
-          <div class="meta-text">
-            <span class="author-name">{{ post.author }}</span>
-            <span class="separator">·</span>
-            <span class="post-sede">{{ post.sede }}</span>
-            <span class="separator">·</span>
-            <span class="timestamp">{{ post.timestamp }}</span>
+      <!-- Estado de Carga (Skeleton) -->
+      <div *ngIf="cargando">
+        <ion-card *ngFor="let i of [1,2,3]" class="reddit-card">
+          <ion-item lines="none">
+            <ion-avatar slot="start">
+              <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+            </ion-avatar>
+            <ion-label>
+              <ion-skeleton-text [animated]="true" style="width: 50%"></ion-skeleton-text>
+            </ion-label>
+          </ion-item>
+          <ion-card-header>
+            <ion-skeleton-text [animated]="true" style="width: 80%"></ion-skeleton-text>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-skeleton-text [animated]="true" style="width: 100%"></ion-skeleton-text>
+            <ion-skeleton-text [animated]="true" style="width: 70%"></ion-skeleton-text>
+          </ion-card-content>
+        </ion-card>
+      </div>
+
+      <!-- Lista de Posts -->
+      <div *ngIf="!cargando">
+        <div *ngFor="let post of filteredPosts" class="reddit-card" [routerLink]="['/post', post.id]">
+          <div class="card-meta">
+            <ion-avatar>
+              <img src="https://ionicframework.com/docs/img/demos/avatar.svg" alt="avatar" />
+            </ion-avatar>
+            <div class="meta-text">
+              <span class="author-name">{{ post.author }}</span>
+              <span class="separator">·</span>
+              <span class="post-sede">{{ post.sede }}</span>
+              <span class="separator">·</span>
+              <span class="timestamp">{{ post.timestamp }}</span>
+            </div>
           </div>
-        </div>
 
-        <div class="card-category">{{ post.category }}</div>
+          <div class="card-category">{{ post.category }}</div>
 
-        <ion-card-header>
-          <ion-card-title>{{ post.title }}</ion-card-title>
-        </ion-card-header>
+          <ion-card-header>
+            <ion-card-title>{{ post.title }}</ion-card-title>
+          </ion-card-header>
 
-        <ion-card-content>
-          {{ post.body | slice:0:100 }}...
-        </ion-card-content>
+          <ion-card-content>
+            {{ post.body | slice:0:100 }}...
+          </ion-card-content>
 
-        <div class="card-footer">
-          <div class="interaction-item">
-            <ion-icon name="thumbs-up-outline"></ion-icon>
-            <span>{{ post.votes }}</span>
-          </div>
-          <div class="interaction-item">
-            <ion-icon name="chatbubble-outline"></ion-icon>
-            <span>{{ post.repliesCount }} respuestas</span>
+          <div class="card-footer">
+            <div class="interaction-item">
+              <ion-icon name="thumbs-up-outline"></ion-icon>
+              <span>{{ post.votes }}</span>
+            </div>
+            <div class="interaction-item">
+              <ion-icon name="chatbubble-outline"></ion-icon>
+              <span>{{ post.repliesCount }} respuestas</span>
+            </div>
           </div>
         </div>
       </div>
 
-      <div *ngIf="filteredPosts.length === 0" class="ion-text-center ion-padding empty-state">
+      <!-- Estado Vacío -->
+      <div *ngIf="!cargando && filteredPosts.length === 0" class="ion-text-center ion-padding empty-state">
         <ion-icon name="alert-circle-outline" style="font-size: 48px; color: var(--ion-color-medium);"></ion-icon>
         <p>No encontramos publicaciones para tu búsqueda.</p>
         <ion-button fill="clear" (click)="setFilter('todas'); clearCategory()">Ver todo</ion-button>
