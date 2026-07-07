@@ -1,17 +1,20 @@
 ﻿import { Component, inject, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
-import { 
-  IonContent, IonHeader, IonTitle, IonToolbar, 
-  IonItem, IonLabel, IonInput, IonButton, IonIcon, 
-  IonCard, IonCardHeader, IonCardTitle, IonCardContent, NavController, IonButtons,
-  IonTextarea, IonSelect, IonSelectOption
+import {
+  IonContent, IonHeader, IonTitle, IonToolbar,
+  IonItem, IonLabel, IonInput, IonButton, IonIcon,
+  IonCard, IonCardHeader, IonCardTitle, IonCardContent,
+  IonButtons, IonTextarea, IonSelect, IonSelectOption,
+  IonSpinner, NavController, AlertController, ToastController
 } from "@ionic/angular/standalone";
 import { PostService, Post } from "../services/post.service";
-import { CameraService } from "../services/camera.service";
-import { UserService } from "../services/user.service";
-import { addIcons } from "ionicons";
+import { CameraService }    from "../services/camera.service";
+import { UserService }      from "../services/user.service";
+import { addIcons }         from "ionicons";
 import { add, camera, arrowBack, sendOutline } from "ionicons/icons";
+
+const CATEGORIAS = ["Programación", "Diseño", "Matemáticas", "Historia", "Física", "General"];
 
 @Component({
   selector: "app-create-post",
@@ -19,32 +22,33 @@ import { add, camera, arrowBack, sendOutline } from "ionicons/icons";
   styleUrls: ["./create-post.page.scss"],
   standalone: true,
   imports: [
-    IonContent, IonHeader, IonTitle, IonToolbar, 
-    IonItem, IonLabel, IonInput, IonButton, IonIcon, 
+    IonContent, IonHeader, IonTitle, IonToolbar,
+    IonItem, IonLabel, IonInput, IonButton, IonIcon,
     IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButtons,
-    IonTextarea, IonSelect, IonSelectOption,
+    IonTextarea, IonSelect, IonSelectOption, IonSpinner,
     CommonModule, FormsModule
   ]
 })
 export class CreatePostPage implements OnInit {
-  private readonly postService = inject(PostService);
+  private readonly postService  = inject(PostService);
   private readonly cameraService = inject(CameraService);
-  private readonly userService = inject(UserService);
-  private readonly navCtrl = inject(NavController);
+  private readonly userService  = inject(UserService);
+  private readonly navCtrl      = inject(NavController);
+  private readonly alertCtrl    = inject(AlertController);
+  private readonly toastCtrl    = inject(ToastController);
 
   newPost: Post = { title: "", body: "", category: "", sede: "" };
   photo: string | undefined = undefined;
-  categories = ["Programación", "Diseño", "Matemáticas", "Historia", "Física", "General"];
+  categories = CATEGORIAS;
+  enviando = false;
 
-  constructor() {
-    addIcons({ add, camera, arrowBack, sendOutline });
-  }
+  constructor() { addIcons({ add, camera, arrowBack, sendOutline }); }
 
   ngOnInit() {
-    const userData = this.userService.getUserData();
-    if (userData) {
-      this.newPost.author = userData.usuario;
-      this.newPost.sede = userData.sede || "";
+    const u = this.userService.getUserData();
+    if (u) {
+      this.newPost.author = u.nombre || u.usuario;
+      this.newPost.sede   = u.sede ?? "";
     }
   }
 
@@ -52,21 +56,31 @@ export class CreatePostPage implements OnInit {
     this.photo = await this.cameraService.takePhoto();
   }
 
-  createPost() {
+  async createPost() {
     if (!this.newPost.title || !this.newPost.body || !this.newPost.category) {
+      const alert = await this.alertCtrl.create({
+        header: "Campos incompletos",
+        message: "Por favor completa el título, categoría y descripción.",
+        buttons: ["Aceptar"]
+      });
+      await alert.present();
       return;
     }
-    
-    this.newPost.timestamp = "Recién ahora";
-    this.newPost.votes = 0;
-    this.newPost.repliesCount = 0;
 
-    this.postService.createPost(this.newPost).subscribe(() => {
+    this.enviando = true;
+    this.newPost.timestamp = "Recién ahora";
+
+    this.postService.createPost(this.newPost).subscribe(async () => {
+      const toast = await this.toastCtrl.create({
+        message: "✅ Pregunta publicada en el foro",
+        duration: 2000,
+        color: "success",
+        position: "top"
+      });
+      await toast.present();
       this.navCtrl.navigateRoot("/home");
     });
   }
 
-  goBack() {
-    this.navCtrl.back();
-  }
+  goBack() { this.navCtrl.back(); }
 }
