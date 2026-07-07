@@ -5,68 +5,86 @@
         <ion-icon name="arrow-back"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>Detalle de Pregunta</ion-title>
+    <ion-title>🎓 DUOC Connect</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
   <div *ngIf="post">
-    <ion-card class="post-card detail-card">
+    <!-- Card Principal -->
+    <ion-card class="main-card">
+      <div class="card-meta">
+        <div class="avatar-badge">{{ inicialAvatar(post.author ?? "") }}</div>
+        <div class="meta-info">
+          <span class="author-name">{{ post.author }}</span>
+          <span class="separator">·</span>
+          <span>{{ post.sede }}</span>
+          <span class="separator">·</span>
+          <span>{{ post.timestamp }}</span>
+        </div>
+      </div>
+
+      <div class="category-pill">{{ post.category }}</div>
+      <h2 class="post-title">{{ post.title }}</h2>
+
       <ion-card-content>
-        <div class="post-top">
-          <div class="avatar-circle">{{ inicialAvatar(post.author ?? "") }}</div>
-          <div class="post-meta">
-            <span class="post-author">{{ post.author }}</span>
-            <span class="dot">·</span>
-            <span class="post-sede">{{ post.sede }}</span>
-            <span class="dot">·</span>
-            <span class="post-time">{{ post.timestamp }}</span>
-          </div>
-        </div>
-
-        <div class="category-tag">{{ post.category }}</div>
-        <h2 class="detail-title">{{ post.title }}</h2>
-        <p class="detail-body">{{ post.body }}</p>
-
-        <div class="post-stats">
-          <span class="stat"><ion-icon name="thumbs-up-outline"></ion-icon> {{ post.votes }} votos</span>
-          <span class="stat"><ion-icon name="chatbubble-outline"></ion-icon> {{ post.comments?.length || 0 }} respuestas</span>
-        </div>
+        <p class="post-body">{{ post.body }}</p>
       </ion-card-content>
+
+      <div class="card-footer">
+        <div class="stat-item">
+          <ion-icon name="thumbs-up-outline"></ion-icon>
+          <span>{{ post.votes }} votos</span>
+        </div>
+        <div class="stat-item">
+          <ion-icon name="chatbubble-outline"></ion-icon>
+          <span>{{ post.comments?.length || 0 }} respuestas</span>
+        </div>
+      </div>
     </ion-card>
 
-    <div class="replies-section">
-      <h3 class="section-subtitle">Respuestas de la comunidad</h3>
-      
-      <div class="comments-list">
-        <div *ngFor="let comment of post.comments" class="comment-item" [class.correct]="comment.isCorrect">
-          <div class="comment-header">
-            <span class="comment-author">{{ comment.author }}</span>
+    <h3 class="section-title">Comunidad</h3>
+
+    <!-- Listado de Comentarios -->
+    <div *ngIf="post.comments && post.comments.length > 0">
+      <div *ngFor="let comment of post.comments" class="comment-item" [class.correct]="comment.isCorrect">
+        <div class="comment-header">
+          <div class="avatar-badge sm">{{ inicialAvatar(comment.author) }}</div>
+          <div class="comment-meta">
+            <strong>{{ comment.author }}</strong>
             <span class="comment-time">{{ comment.timestamp }}</span>
-            <ion-badge color="success" *ngIf="comment.isCorrect">Correcta</ion-badge>
           </div>
-          <p class="comment-text">{{ comment.body }}</p>
-          <div class="comment-footer" *ngIf="!comment.isCorrect">
-            <ion-button fill="clear" size="small" (click)="markAsCorrect(comment)">
-              <ion-icon slot="start" name="checkmark-circle"></ion-icon>
-              Es la solución
-            </ion-button>
-          </div>
+          <ion-badge color="success" class="correct-badge" *ngIf="comment.isCorrect">Solución</ion-badge>
+        </div>
+        
+        <p class="comment-body">{{ comment.body }}</p>
+
+        <div class="comment-actions" *ngIf="!comment.isCorrect">
+          <ion-button fill="clear" size="small" (click)="markAsCorrect(comment)">
+            <ion-icon slot="start" name="checkmark-circle"></ion-icon>
+            Es la solución
+          </ion-button>
         </div>
       </div>
     </div>
+
+    <!-- Estado vacío de comentarios -->
+    <div *ngIf="!post.comments || post.comments.length === 0" class="empty-comments">
+      <ion-icon name="chatbubble-outline"></ion-icon>
+      <p>Aún no hay respuestas. ¡Sé el primero!</p>
+    </div>
   </div>
 
-  <div *ngIf="!post" class="loading-state">
-    <ion-spinner name="crescent"></ion-spinner>
-    <p>Cargando publicación...</p>
+  <div *ngIf="!post" class="ion-text-center ion-padding">
+    <ion-spinner name="crescent" color="primary"></ion-spinner>
+    <p>Buscando publicación...</p>
   </div>
 </ion-content>
 
 <ion-footer>
   <ion-toolbar color="light">
-    <ion-item lines="none" class="reply-input-item">
-      <ion-input [(ngModel)]="newComment" placeholder="Aporta a la solución..." (keyup.enter)="addComment()"></ion-input>
+    <ion-item lines="none">
+      <ion-input [(ngModel)]="newComment" placeholder="Escribe una respuesta..." (keyup.enter)="addComment()"></ion-input>
       <ion-button slot="end" fill="clear" (click)="addComment()" [disabled]="!newComment.trim()">
         <ion-icon name="send-outline"></ion-icon>
       </ion-button>
