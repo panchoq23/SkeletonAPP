@@ -10,46 +10,43 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <div class="create-container">
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>¿Qué duda tienes hoy?</ion-card-title>
-      </ion-card-header>
-      
-      <ion-card-content>
-        <ion-item lines="full">
-          <ion-label position="stacked">Título de la duda</ion-label>
-          <ion-input [(ngModel)]="newPost.title" placeholder="Ej: Error en SQLite al inicializar"></ion-input>
-        </ion-item>
+  <ion-card class="create-card">
+    <ion-card-header>
+      <ion-card-title>¿Qué duda tienes hoy?</ion-card-title>
+    </ion-card-header>
 
-        <ion-item lines="full">
-          <ion-label position="stacked">Categoría</ion-label>
-          <ion-select [(ngModel)]="newPost.category" placeholder="Selecciona un área">
-            <ion-select-option *ngFor="let cat of categories" [value]="cat">{{ cat }}</ion-select-option>
-          </ion-select>
-        </ion-item>
-        
-        <ion-item lines="full">
-          <ion-label position="stacked">Descripción detallada</ion-label>
-          <ion-textarea [(ngModel)]="newPost.body" rows="4" placeholder="Explica tu problema o pregunta aquí..."></ion-textarea>
-        </ion-item>
+    <ion-card-content>
+      <ion-item lines="full" class="form-item">
+        <ion-label position="stacked">Título de la duda <span class="required">*</span></ion-label>
+        <ion-input [(ngModel)]="newPost.title" placeholder="Ej: Error al inicializar SQLite en Android"></ion-input>
+      </ion-item>
 
-        <div class="ion-margin-top">
-          <ion-button expand="block" color="secondary" fill="outline" (click)="takePhoto()">
-            <ion-icon slot="start" name="camera"></ion-icon>
-            {{ photo ? "Cambiar Evidencia" : "Adjuntar Evidencia (Cámara)" }}
-          </ion-button>
-        </div>
+      <ion-item lines="full" class="form-item">
+        <ion-label position="stacked">Categoría <span class="required">*</span></ion-label>
+        <ion-select [(ngModel)]="newPost.category" placeholder="Selecciona un área" interface="popover">
+          <ion-select-option *ngFor="let cat of categories" [value]="cat">{{ cat }}</ion-select-option>
+        </ion-select>
+      </ion-item>
 
-        <div *ngIf="photo" class="preview-container ion-margin-top">
-          <img [src]="photo" />
-        </div>
+      <ion-item lines="full" class="form-item">
+        <ion-label position="stacked">Descripción detallada <span class="required">*</span></ion-label>
+        <ion-textarea [(ngModel)]="newPost.body" rows="5" placeholder="Explica tu problema con detalle para recibir mejores respuestas..."></ion-textarea>
+      </ion-item>
 
-        <ion-button expand="block" class="ion-margin-top publish-btn" (click)="createPost()">
-          <ion-icon slot="start" name="send-outline"></ion-icon>
-          Publicar en el Foro
-        </ion-button>
-      </ion-card-content>
-    </ion-card>
-  </div>
+      <ion-button expand="block" fill="outline" color="secondary" class="photo-btn" (click)="takePhoto()">
+        <ion-icon slot="start" name="camera"></ion-icon>
+        {{ photo ? "Cambiar imagen adjunta" : "Adjuntar imagen (opcional)" }}
+      </ion-button>
+
+      <div *ngIf="photo" class="photo-preview">
+        <img [src]="photo" alt="Imagen adjunta" />
+      </div>
+
+      <ion-button expand="block" class="publish-btn" [disabled]="enviando" (click)="createPost()">
+        <ion-spinner *ngIf="enviando" name="crescent" slot="start"></ion-spinner>
+        <ion-icon *ngIf="!enviando" slot="start" name="send-outline"></ion-icon>
+        {{ enviando ? "Publicando..." : "Publicar en el Foro" }}
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
