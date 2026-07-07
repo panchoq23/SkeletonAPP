@@ -4,8 +4,9 @@ import { FormsModule } from "@angular/forms";
 import { 
   IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, 
   IonMenuButton, IonSegment, IonSegmentButton, IonLabel, 
-  IonList, IonItem, IonFab, IonFabButton, IonIcon, IonSpinner,
-  IonAvatar, IonCardHeader, IonCardTitle, IonCardContent, IonChip, IonButton
+  IonFab, IonFabButton, IonIcon,
+  IonAvatar, IonCardHeader, IonCardTitle, IonCardContent, IonChip, IonButton,
+  IonSearchbar
 } from "@ionic/angular/standalone";
 import { PostService, Post } from "../services/post.service";
 import { UserService } from "../services/user.service";
@@ -25,8 +26,9 @@ import { Router, RouterModule, ActivatedRoute } from "@angular/router";
   imports: [
     IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, 
     IonMenuButton, IonSegment, IonSegmentButton, IonLabel, 
-    IonList, IonItem, IonFab, IonFabButton, IonIcon, IonSpinner,
+    IonFab, IonFabButton, IonIcon,
     IonAvatar, IonCardHeader, IonCardTitle, IonCardContent, IonChip, IonButton,
+    IonSearchbar,
     MisDatosComponent, CommonModule, FormsModule, RouterModule
   ],
 })
@@ -41,6 +43,7 @@ export class HomePage implements OnInit {
   selectedSegment: string = "foro";
   filterSede: string = "todas"; 
   filterCategory: string | null = null;
+  searchQuery: string = "";
   
   allPosts: Post[] = [];
   filteredPosts: Post[] = [];
@@ -82,6 +85,11 @@ export class HomePage implements OnInit {
     });
   }
 
+  onSearch(event: any) {
+    this.searchQuery = event.detail.value?.toLowerCase() || "";
+    this.applyFilter();
+  }
+
   setFilter(filter: string) {
     this.filterSede = filter;
     this.applyFilter();
@@ -96,6 +104,13 @@ export class HomePage implements OnInit {
 
     if (this.filterCategory) {
       result = result.filter(p => p.category === this.filterCategory);
+    }
+
+    if (this.searchQuery) {
+      result = result.filter(p => 
+        p.title.toLowerCase().includes(this.searchQuery) || 
+        p.body.toLowerCase().includes(this.searchQuery)
+      );
     }
 
     this.filteredPosts = result;
