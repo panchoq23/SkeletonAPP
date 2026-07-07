@@ -6,7 +6,8 @@ import {
   IonContent, IonHeader, IonTitle, IonToolbar,
   IonItem, IonLabel, IonButton, IonIcon,
   IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButtons,
-  IonAvatar, IonBadge, IonFooter, IonInput, NavController, AlertController
+  IonAvatar, IonBadge, IonFooter, IonInput, NavController, AlertController,
+  IonSpinner
 } from "@ionic/angular/standalone";
 import { PostService, Post, Comment } from "../services/post.service";
 import { UserService } from "../services/user.service";
@@ -22,7 +23,7 @@ import { arrowBack, thumbsUpOutline, chatbubbleOutline, checkmarkCircle, sendOut
     IonContent, IonHeader, IonTitle, IonToolbar,
     IonItem, IonLabel, IonButton, IonIcon,
     IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButtons,
-    IonAvatar, IonBadge, IonFooter, IonInput,
+    IonAvatar, IonBadge, IonFooter, IonInput, IonSpinner,
     CommonModule, FormsModule
   ]
 })
