@@ -6,7 +6,7 @@ import {
   IonMenuButton, IonSegment, IonSegmentButton, IonLabel,
   IonFab, IonFabButton, IonIcon, IonChip, IonCard,
   IonCardHeader, IonCardTitle, IonCardContent, IonButton,
-  IonAvatar, IonSkeletonText
+  IonAvatar, IonSkeletonText, IonSearchbar, IonItem
 } from "@ionic/angular/standalone";
 import { PostService, Post } from "../services/post.service";
 import { UserService }       from "../services/user.service";
@@ -28,7 +28,7 @@ import { Router, RouterModule, ActivatedRoute } from "@angular/router";
     IonMenuButton, IonSegment, IonSegmentButton, IonLabel,
     IonFab, IonFabButton, IonIcon, IonChip, IonCard,
     IonCardHeader, IonCardTitle, IonCardContent, IonButton,
-    IonAvatar, IonSkeletonText,
+    IonAvatar, IonSkeletonText, IonSearchbar, IonItem,
     MisDatosComponent, CommonModule, FormsModule, RouterModule
   ],
 })
@@ -43,6 +43,7 @@ export class HomePage implements OnInit {
   selectedSegment: string = "foro";
   filterSede:      string = "todas";
   filterCategory:  string | null = null;
+  searchQuery:     string = "";
 
   allPosts:      Post[] = [];
   filteredPosts: Post[] = [];
@@ -78,6 +79,11 @@ export class HomePage implements OnInit {
     });
   }
 
+  onSearch(event: any) {
+    this.searchQuery = event.detail.value?.toLowerCase() || "";
+    this.applyFilter();
+  }
+
   setFilter(filter: string) {
     this.filterSede = filter;
     this.applyFilter();
@@ -85,12 +91,22 @@ export class HomePage implements OnInit {
 
   applyFilter() {
     let result = [...this.allPosts];
+    
     if (this.filterSede === "mi-sede" && this.miSede) {
       result = result.filter(p => p.sede === this.miSede);
     }
+    
     if (this.filterCategory) {
       result = result.filter(p => p.category === this.filterCategory);
     }
+
+    if (this.searchQuery) {
+      result = result.filter(p => 
+        p.title.toLowerCase().includes(this.searchQuery) || 
+        p.body.toLowerCase().includes(this.searchQuery)
+      );
+    }
+
     this.filteredPosts = result;
   }
 
